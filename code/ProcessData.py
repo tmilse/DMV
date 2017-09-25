@@ -85,44 +85,66 @@ def SplitAddresses(df):
     
     # Initialize empty data frames
     addressesDF = pd.DataFrame(columns = ["Address"]) # Initiate empty dataframe to store addresses
+    cityDF = pd.DataFrame(columns = ["City"]) # Initiate empty dataframe to store city
+    stateDF = pd.DataFrame(columns = ["State"]) # Initiate empty dataframe to store state
     zipCodeDF = pd.DataFrame(columns = ["Zip_Code"]) # Initiate empty dataframe to store zip codes
 
     # Loop through elements and grab address and zip code
     for element in df["Address"]:
         tempAddress = pd.DataFrame([element.split(",")[0]], columns = ["Address"])
+        tempCity = pd.DataFrame([element.split(",")[1]], columns = ["City"])
+        if tempCity.City[0] == " Washington":
+            tempCity.at[0, "City"] = "District of Columbia"
+        tempState = pd.DataFrame([element[len(element)-8:len(element) - 5]], columns = ["State"])
+        if tempState.State[0] == "DC ":
+            tempState.at[0, "State"] = "District of Columbia"
         tempZipCode = pd.DataFrame([element[len(element)-5:len(element)]], columns = ["Zip_Code"])
+
         addressesDF = addressesDF.append(tempAddress, ignore_index = True)
+        cityDF = cityDF.append(tempCity, ignore_index = True)
+        stateDF = stateDF.append(tempState, ignore_index = True)        
         zipCodeDF = zipCodeDF.append(tempZipCode, ignore_index = True)
 
     # Insert address, city, and zip code into dataframe and return dataframe
     df.drop(labels = "Address", axis = 1, inplace = True)
     df.insert(loc = 2, column = "Address", value = addressesDF)
-    df.insert(loc = 3, column = "City", value = ["District of Columbia"]*len(zipCodeDF)) # NEED TO CHANGE THIS TO THE APPROPRIATE CITY IN THE FUTURE
-    df.insert(loc = 4, column = "Zip_Code", value = zipCodeDF)
+    df.insert(loc = 3, column = "City", value = cityDF)
+    df.insert(loc = 4, column = "State", value = stateDF) 
+    df.insert(loc = 5, column = "Zip_Code", value = zipCodeDF)
     return(df)
 
 def GetMinMaxRent(df):
     
     # Import required packages
     import re
+    import math
     
     rentDF = pd.DataFrame() # Initiate empty dataframe to store min/max rent
     
     # Loop through rent and get min/max rent
     for rent in df["Rent"]:
-        tempRent = re.sub("\$", "", rent)
-        tempRentSplit = tempRent.split(" - ") 
-        if len(tempRentSplit) == 2: #Rent could be given as a range
-            rentDF = rentDF.append([tempRentSplit], ignore_index = True)
-        elif tempRent == "Call for Rent": # Rent might not be listed
-            rentDF = rentDF.append([["NA", "NA"]], ignore_index = True)
-        else: # Else rent is a single value
-            rentDF = rentDF.append([[tempRent, tempRent]], ignore_index = True)
+        if isinstance(rent, str):
+            tempRent = re.sub("\$", "", rent)
+            tempRentSplit = tempRent.split(" - ") 
+            if len(tempRentSplit) == 2: #Rent could be given as a range
+                tempRentSplit[0] = int(re.sub(",", "", tempRentSplit[0]))
+                tempRentSplit[1] = int(re.sub(",", "", tempRentSplit[1]))
+                rentDF = rentDF.append([tempRentSplit], ignore_index = True)
+            elif tempRent == "Call for Rent": # Rent might not be listed
+                rentDF = rentDF.append([[math.nan, math.nan]], ignore_index = True)
+            else: # Else rent is a single value
+                tempRent = int(re.sub(",", "", tempRent))
+                rentDF = rentDF.append([[tempRent, tempRent]], ignore_index = True)
+        else:
+            rentDF = rentDF.append([[math.nan, math.nan]], ignore_index = True)
+
+            
+    
     
     # Rename columns, insert into dataframe and return dataframe
     rentDF.rename(index=str, columns={"0": "Min_Rent", "1": "Max_Rent"})
-    df.insert(loc = 5, column = "Min_Rent", value = rentDF[0])
-    df.insert(loc = 6, column = "Max_Rent", value = rentDF[1])
+    df.insert(loc = 6, column = "Min_Rent", value = rentDF[0])
+    df.insert(loc = 7, column = "Max_Rent", value = rentDF[1])
 
     return(df)
     
@@ -130,6 +152,8 @@ def GetSqFt(df):
     
     # Import required packages
     import pandas as pd
+    import math
+    import re
     
     sqFtDF = pd.DataFrame() # Initiate empty dataframe to store square feet
     
@@ -139,32 +163,84 @@ def GetSqFt(df):
             tempSqFt = sqft.split(" Sq Ft")[0]
             tempSqFtSplit = tempSqFt.split(" - ") 
             if len(tempSqFtSplit) == 2:
+                tempSqFtSplit[0] = int(re.sub(",", "", tempSqFtSplit[0]))
+                tempSqFtSplit[1] = int(re.sub(",", "", tempSqFtSplit[1]))
                 sqFtDF = sqFtDF.append([tempSqFtSplit], ignore_index = True)
             else:
+                tempSqFt = int(re.sub(",", "", tempSqFt))
                 sqFtDF = sqFtDF.append([[tempSqFt, tempSqFt]], ignore_index = True)
         else:
-            sqFtDF = sqFtDF.append([["NA", "NA"]], ignore_index = True)
+            sqFtDF = sqFtDF.append([[math.nan, math.nan]], ignore_index = True)
 
         
     # Insert column and return dataframe
     sqFtDF.rename(index=str, columns={"0": "Min_Sq_Ft", "1": "Max_Sq_Ft"})
-    df.insert(loc = 7, column = "Min_Sq_Ft", value = sqFtDF[0])
-    df.insert(loc = 8, column = "Max_Sq_Ft", value = sqFtDF[1])
+    df.insert(loc = 8, column = "Min_Sq_Ft", value = sqFtDF[0])
+    df.insert(loc = 9, column = "Max_Sq_Ft", value = sqFtDF[1])
 
     return(df)
+    
+def GetPetPolicy(df):
+    
+    # Import required packages
+    import pandas as pd
+    import numpy as np
+    
+    # Initialize empty data frame to store pet policy
+    petPolicy = pd.DataFrame()
+    
+    for policy in df["Pet Policy"]:
+        if isinstance(policy, str) == True:
+            tempPolicy = policy.split("* ")
+            if tempPolicy[0] == "":
+                tempPolicy[0] = np.nan
+            petPolicy = petPolicy.append(tempPolicy, ignore_index = True)
+            petPolicy.dropna(axis = 0, inplace = True)
+    
+    return(petPolicy)
         
 # ----------------------------------------- END FUNCTIONS -----------------------------------------#
 # ----------------------------------------- BEGIN SCRIPT -----------------------------------------#
 
 # Import required packages
 import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+import re
+import numpy as np
 
-# Just for DC apartments for now
-df = pd.read_csv("https://worm.nyc3.digitaloceanspaces.com/apartmentsDC.csv", encoding = "latin-1")
-df = GetNames(df)
-df = GetLinks(df)
-df = GetAddresses(df)
-df = SplitAddresses(df)
-df = GetMinMaxRent(df)
-df = GetSqFt(df)
-df = DropCols(df)
+# -------------------------- Use the below code to get all data in its original form in a single data frame
+DataList = requests.get("https://worm.nyc3.digitaloceanspaces.com/") # Request html from data store
+soup = BeautifulSoup(DataList.text, "lxml") # Parse html
+DataList = soup.find_all("key") # Find the name of each csv file and store
+
+# Initialize empty list to store url to files
+Data = []
+
+#Loop through csv files in list of data and append rest of url
+for files in DataList:
+    Data.append("https://worm.nyc3.digitaloceanspaces.com/"+files.text)
+        
+# Initialize empty data frame to store all original data in a single data frame
+df = pd.DataFrame()
+
+# Loop through all csv files and append 
+for files in Data:
+    tempDF = pd.read_csv(files, encoding = "latin-1")
+    df = df.append(tempDF, ignore_index = True) 
+# -------------------------- Use the above code to get all data in its original form in a single data frame
+
+# -------------------------- Use the below code to clean the data from its original form 
+df = GetNames(df) # Gets the names of the properties
+df = GetLinks(df) # Gets the link to property-level information 
+df = GetAddresses(df) # Gets the addresses of each property
+df = SplitAddresses(df)#, CityState[i][0:len(CityState[i]) - 2], CityState[i][len(CityState[i]) - 2:len(CityState[i])]) # Splits the address into street, city, state, zip
+df = GetMinMaxRent(df) # Creates new columns for minimum rent and maximum rent
+df = GetSqFt(df) # Creates new columns for minimum sq ft, maximum sq fit
+#allFees = GetPetPolicy(df) # In progress working on how to unpack pet policy
+df = DropCols(df) # Drops columns no longer necessary
+# -------------------------- Use the above code to clean the data from its original form 
+
+
+# ----------------------------------------- END SCRIPT -----------------------------------------#
+        
