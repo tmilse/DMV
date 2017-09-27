@@ -12,7 +12,7 @@ def DropCols(df):
     import pandas as pd
     
     # Drop columns labeled Distance and Duration from dataframe
-    df.drop(labels = ["Distance","Duration","Option Name", "Rent", "Size"], axis = 1, inplace = True)
+    df.drop(labels = ["Distance","Duration","Option Name", "Rent", "Size", "Pet Policy"], axis = 1, inplace = True)
     
     # Return dataframe
     return(df)
@@ -184,20 +184,46 @@ def GetPetPolicy(df):
     
     # Import required packages
     import pandas as pd
-    import numpy as np
     
     # Initialize empty data frame to store pet policy
     petPolicy = pd.DataFrame()
     
     for policy in df["Pet Policy"]:
-        if isinstance(policy, str) == True:
-            tempPolicy = policy.split("* ")
-            if tempPolicy[0] == "":
-                tempPolicy[0] = np.nan
-            petPolicy = petPolicy.append(tempPolicy, ignore_index = True)
-            petPolicy.dropna(axis = 0, inplace = True)
-    
-    return(petPolicy)
+        if isinstance(policy, str):
+            if "Dogs Allowed" in policy:
+                petPolicy = petPolicy.append([1], ignore_index = True)
+            elif "Cats Allowed" in policy:
+                petPolicy = petPolicy.append([2], ignore_index = True)
+            elif "Dogs and Cats Allowed" in policy:
+                petPolicy = petPolicy.append([3], ignore_index = True)
+            elif "No Pets Allowed" in policy:
+                petPolicy = petPolicy.append([4], ignore_index = True)
+            elif "Pets Negotiable" in policy:
+                petPolicy = petPolicy.append([5], ignore_index = True)
+            elif "Other Pets Allowed" in policy:
+                petPolicy = petPolicy.append([6], ignore_index = True)
+            elif "Birds Allowed" in policy:
+                petPolicy = petPolicy.append([7], ignore_index = True)
+            elif "Birds and Fish Allowed" in policy:
+                petPolicy = petPolicy.append([8], ignore_index = True)
+            elif "Dogs, Cats and Other Pets Allowed" in policy:
+                petPolicy = petPolicy.append([9], ignore_index = True)
+            elif "Dogs, Cats, Birds, Fish, Reptiles and Other Pets Allowed" in policy:
+                petPolicy = petPolicy.append([10], ignore_index = True)
+            elif "Cats and Fish Allowed" in policy:
+                petPolicy = petPolicy.append([11], ignore_index = True)
+            elif "Cats, Birds and Fish Allowed" in policy:
+                petPolicy = petPolicy.append([12], ignore_index = True)
+            elif "Cats, Birds, Fish and Reptiles Allowed" in policy:
+                petPolicy = petPolicy.append([13], ignore_index = True)
+            elif "Cats, Birds, Fish, Reptiles and Other Pets Allowed" in policy:
+                petPolicy = petPolicy.append([14], ignore_index = True)
+        else:
+            petPolicy = petPolicy.append([15], ignore_index = True)
+            
+    df.insert(loc = 10, column = "Pet_Policy", value = petPolicy)
+
+    return(df)
         
 # ----------------------------------------- END FUNCTIONS -----------------------------------------#
 # ----------------------------------------- BEGIN SCRIPT -----------------------------------------#
@@ -237,7 +263,7 @@ df = GetAddresses(df) # Gets the addresses of each property
 df = SplitAddresses(df)#, CityState[i][0:len(CityState[i]) - 2], CityState[i][len(CityState[i]) - 2:len(CityState[i])]) # Splits the address into street, city, state, zip
 df = GetMinMaxRent(df) # Creates new columns for minimum rent and maximum rent
 df = GetSqFt(df) # Creates new columns for minimum sq ft, maximum sq fit
-#allFees = GetPetPolicy(df) # In progress working on how to unpack pet policy
+df = GetPetPolicy(df) # In progress working on how to unpack pet policy
 df = DropCols(df) # Drops columns no longer necessary
 # -------------------------- Use the above code to clean the data from its original form 
 
