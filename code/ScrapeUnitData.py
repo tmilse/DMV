@@ -17,6 +17,13 @@
 #
 #                       Try not to replace anything else because I'm using the PropertyID+str(i)+".html" part to keep track of the value of i                
 #             MAC USERS: When writing file paths like above I think you need to use FORWARD SLASHES rather than BACKWARD SLASHES
+#
+#            NOTE: You MIGHT run into an error when you write the html to a file locally on your computer. I'm not exactly sure how to 
+#                  solve that at the moment. What you could try doing is just take note of the value of i where you encounter a difficulty
+#                  and just skip over that value for now. The error has to do with saving a certain type of character that's in the html
+#                  So for example if I'm getting an error when i = 1700, then just restart the code, but start at i = 1701 instead of 
+#                  i = 1700. But definitely note where the error occurred. I encountered an error scraping when i = 954
+#
 
 # Import required packages
 import requests # This package will scrape the data
