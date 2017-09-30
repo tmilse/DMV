@@ -9,7 +9,7 @@ import os
 from ParseUnitData import Parse
 import re
 
-files = os.listdir("C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Unit Data")
+files = os.listdir("C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Unit Data 2")
 #AllCities = pd.read_csv("C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Partly Cleaned September 24\\AllCities.csv", encoding = "latin-1")
 
 
@@ -20,7 +20,7 @@ numRegex = re.compile(r"\d{1,4}")
 
 for file in files:
     ID = numRegex.search(file).group()
-    T = Parse("C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Unit Data\\"+file, ID)
+    T = Parse("C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Unit Data 2\\"+file, ID)
     Transportation.append(T)
     #Transportation.append(Transport)
     

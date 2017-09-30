@@ -19,7 +19,7 @@ def Parse(path, i):
     
     beds = ["bed0", "bed1", "bed2", "bed3", "bed4", "bed5"]
     numRegex = re.compile(r"\d")
-    
+#    
 #    Beds = []
 #    Baths = []
 #    MinRent = []

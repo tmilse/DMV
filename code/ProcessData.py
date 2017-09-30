@@ -12,7 +12,7 @@ def DropCols(df):
     import pandas as pd
     
     # Drop columns labeled Distance and Duration from dataframe
-    df.drop(labels = ["Distance","Duration","Option Name", "Rent", "Size", "Pet Policy"], axis = 1, inplace = True)
+    df.drop(labels = ["Distance","Duration","Option Name", "Rent", "Size"], axis = 1, inplace = True)
     
     # Return dataframe
     return(df)
@@ -234,19 +234,27 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import numpy as np
+import os
 
-# -------------------------- Use the below code to get all data in its original form in a single data frame
-DataList = requests.get("https://worm.nyc3.digitaloceanspaces.com/") # Request html from data store
-soup = BeautifulSoup(DataList.text, "lxml") # Parse html
-DataList = soup.find_all("key") # Find the name of each csv file and store
-
-# Initialize empty list to store url to files
+## -------------------------- Use the below code to get all data in its original form in a single data frame
+#DataList = requests.get("https://worm.nyc3.digitaloceanspaces.com/") # Request html from data store
+#soup = BeautifulSoup(DataList.text, "lxml") # Parse html
+#DataList = soup.find_all("key") # Find the name of each csv file and store
+#
+## Initialize empty list to store url to files
 Data = []
-
-#Loop through csv files in list of data and append rest of url
-for files in DataList:
-    Data.append("https://worm.nyc3.digitaloceanspaces.com/"+files.text)
+#
+##Loop through csv files in list of data and append rest of url
+#for files in DataList:
+#    Data.append("https://worm.nyc3.digitaloceanspaces.com/"+files.text)
         
+
+# Locally
+folderpath = "C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Newly Obtained Property Data 9-29-17\\"
+
+for files in os.listdir(folderpath):
+    Data.append(folderpath+files)
+
 # Initialize empty data frame to store all original data in a single data frame
 df = pd.DataFrame()
 
@@ -261,9 +269,9 @@ df = GetNames(df) # Gets the names of the properties
 df = GetLinks(df) # Gets the link to property-level information 
 df = GetAddresses(df) # Gets the addresses of each property
 df = SplitAddresses(df)#, CityState[i][0:len(CityState[i]) - 2], CityState[i][len(CityState[i]) - 2:len(CityState[i])]) # Splits the address into street, city, state, zip
-df = GetMinMaxRent(df) # Creates new columns for minimum rent and maximum rent
-df = GetSqFt(df) # Creates new columns for minimum sq ft, maximum sq fit
-df = GetPetPolicy(df) # In progress working on how to unpack pet policy
+#df = GetMinMaxRent(df) # Creates new columns for minimum rent and maximum rent
+#df = GetSqFt(df) # Creates new columns for minimum sq ft, maximum sq fit
+#df = GetPetPolicy(df) # In progress working on how to unpack pet policy
 df = DropCols(df) # Drops columns no longer necessary
 # -------------------------- Use the above code to clean the data from its original form 
 

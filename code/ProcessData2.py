@@ -208,12 +208,12 @@ def GetPetPolicy(df):
 
             petPolicy = petPolicy.append([15], ignore_index = True)
 
-            
+    L = len(df)        
     #df.insert(loc = 10, column = "Pet_Policy", value = petPolicy)
 
     df = pd.DataFrame()
     
-    df["pid"] = range(0,6037)
+    df["pid"] = range(0 + 6037,L + 6037)
     df["dogsallowed"] = DogsA[0]
     df["catsallowed"] = CatsA[0] 
     df["nopets"] = NoPet[0] 
@@ -327,9 +327,11 @@ def GetParkingPolicy(df):
             parkPolicy = parkPolicy.append([13], ignore_index = True)
     
     #df.insert(loc = 11, column = "Park_Policy", value = parkPolicy)
+    L = len(df)        
+
     
     df2 = pd.DataFrame()
-    df2["pid"] = range(0,6037)
+    df2["pid"] = range(0 + 6037,L + 6037)
     df2["covpark"] = CoveredPark[0]
     df2["lotpark"] = LotPark[0]
     df2["stpark"] = StreetPark[0]
@@ -341,7 +343,7 @@ def GetFeatures(df):
     import pandas as pd
     
     featuresDF = pd.DataFrame()
-    i = 0
+    i = 6037
     pid = pd.DataFrame()
     
     for elements in df["Features"]:
@@ -372,7 +374,7 @@ def GetMonthlyFees(df):
     feesDF = pd.DataFrame()
     PropertyID = pd.DataFrame()
     
-    i = 0
+    i = 6037
     for fees in df["Monthly Fees"]:
         if isinstance(fees, str):
             tempFees = fees.split("* ")
@@ -456,7 +458,7 @@ def GetGym(df):
     import pandas as pd
     
     gymDF = pd.DataFrame()
-    i = 0
+    i = 6037
     pid = pd.DataFrame()
     
     for elements in df["Gym"]:
@@ -484,7 +486,7 @@ def GetKitchen(df):
     import pandas as pd
     
     kitchDF = pd.DataFrame()
-    i = 0
+    i = 6037
     pid = pd.DataFrame()
     
     for elements in df["Kitchen"]:
@@ -513,7 +515,7 @@ def GetAmenities(df):
     import pandas as pd
     
     kitchDF = pd.DataFrame()
-    i = 0
+    i = 6037
     pid = pd.DataFrame()
     
     for elements in df["Amenities"]:
@@ -554,7 +556,7 @@ def GetLivingSpace(df):
     import pandas as pd
     
     kitchDF = pd.DataFrame()
-    i = 0
+    i = 6037
     pid = pd.DataFrame()
     
     for elements in df["Living Space"]:
@@ -589,6 +591,208 @@ def GetLivingSpace(df):
 #        
 #    return(livspaceDF)    
 
+def GetServices(df):
+    
+    import pandas as pd
+    
+    kitchDF = pd.DataFrame()
+    i = 0
+    pid = pd.DataFrame()
+    
+    for elements in df["Services"]:
+        if isinstance(elements, str):
+            tempElements = elements.split("* ")
+            tempElements2 = []
+            for x in tempElements[1:]:
+                tempElements2.append(x.strip().replace("\n", ""))
+            kitchDF = kitchDF.append(tempElements2, ignore_index = True)
+            pid = pid.append([i]*len(tempElements2), ignore_index = True)
+            i+=1
+        else:
+            kitchDF = kitchDF.append(["NA"], ignore_index = True)
+            pid = pid.append([i], ignore_index = True)
+            i+=1
+
+    KitchenDF = pd.DataFrame()
+    KitchenDF["pid"] = pid[0]
+    KitchenDF["kitchenfeat"] = kitchDF[0]
+    
+    return(KitchenDF)
+    
+def GetPropertyInfo(df):
+
+    
+    import pandas as pd
+    
+    kitchDF = pd.DataFrame()
+    i = 0
+    pid = pd.DataFrame()
+    
+    for elements in df["Property Info"]:
+        if isinstance(elements, str):
+            tempElements = elements.split("* ")
+            tempElements2 = []
+            for x in tempElements[1:]:
+                tempElements2.append(x.strip().replace("\n", ""))
+            kitchDF = kitchDF.append(tempElements2, ignore_index = True)
+            pid = pid.append([i]*len(tempElements2), ignore_index = True)
+            i+=1
+        else:
+            kitchDF = kitchDF.append(["NA"], ignore_index = True)
+            pid = pid.append([i], ignore_index = True)
+            i+=1
+
+    KitchenDF = pd.DataFrame()
+    KitchenDF["pid"] = pid[0]
+    KitchenDF["kitchenfeat"] = kitchDF[0]
+    
+    return(KitchenDF)
+    
+def GetIndoorInfo(df):
+
+    
+    import pandas as pd
+    
+    kitchDF = pd.DataFrame()
+    i = 0
+    pid = pd.DataFrame()
+    
+    for elements in df["Indoor Info"]:
+        if isinstance(elements, str):
+            tempElements = elements.split("* ")
+            tempElements2 = []
+            for x in tempElements[1:]:
+                tempElements2.append(x.strip().replace("\n", ""))
+            kitchDF = kitchDF.append(tempElements2, ignore_index = True)
+            pid = pid.append([i]*len(tempElements2), ignore_index = True)
+            i+=1
+        else:
+            kitchDF = kitchDF.append(["NA"], ignore_index = True)
+            pid = pid.append([i], ignore_index = True)
+            i+=1
+
+    KitchenDF = pd.DataFrame()
+    KitchenDF["pid"] = pid[0]
+    KitchenDF["kitchenfeat"] = kitchDF[0]
+    
+    return(KitchenDF)
+    
+def GetOutdoorInfo(df):
+
+    
+    import pandas as pd
+    
+    kitchDF = pd.DataFrame()
+    i = 0
+    pid = pd.DataFrame()
+    
+    for elements in df["Outdoor Info"]:
+        if isinstance(elements, str):
+            tempElements = elements.split("* ")
+            tempElements2 = []
+            for x in tempElements[1:]:
+                tempElements2.append(x.strip().replace("\n", ""))
+            kitchDF = kitchDF.append(tempElements2, ignore_index = True)
+            pid = pid.append([i]*len(tempElements2), ignore_index = True)
+            i+=1
+        else:
+            kitchDF = kitchDF.append(["NA"], ignore_index = True)
+            pid = pid.append([i], ignore_index = True)
+            i+=1
+
+    KitchenDF = pd.DataFrame()
+    KitchenDF["pid"] = pid[0]
+    KitchenDF["kitchenfeat"] = kitchDF[0]
+    
+    return(KitchenDF)
+    
+def GetOneTimeFees(df):
+    
+    import pandas as pd
+    import math
+    
+    feesDF = pd.DataFrame()
+    PropertyID = pd.DataFrame()
+    
+    i = 0
+    for fees in df["One Time Fees"]:
+        if isinstance(fees, str):
+            tempFees = fees.split("* ")
+            feesDF = feesDF.append(tempFees[1:], ignore_index = True)
+            PropertyID = PropertyID.append([i]*len(tempFees[1:]), ignore_index = True)
+            i+=1
+        else:
+            feesDF = feesDF.append(["NA"], ignore_index = True)
+            PropertyID = PropertyID.append([i], ignore_index = True)
+            i+=1
+    
+    df_final = pd.DataFrame()
+    df_final["fees"] = feesDF[0]
+    df_final["PropertyID"] = PropertyID[0]
+    
+    Description = pd.DataFrame()
+    Cost = pd.DataFrame()
+    
+    for fees in df_final["fees"]:
+        tempFees = fees.strip().split(":")
+        if len(tempFees) == 1:
+            Description = Description.append(tempFees, ignore_index = True)
+            Cost = Cost.append(tempFees, ignore_index = True)
+        else:
+            Description = Description.append([tempFees[0]], ignore_index = True)
+            Cost = Cost.append([tempFees[1]], ignore_index = True)
+
+    df_final["desc"] = Description[0]
+    df_final["cost"] = Cost[0]
+
+    i = 0
+    Split = pd.DataFrame()
+    PropertyID2 = pd.DataFrame()
+    MinCost = pd.DataFrame()
+    MaxCost = pd.DataFrame()
+    
+    for desc in df_final["desc"]:
+        temp = desc.split(",")
+#        if len(temp) == 1:
+#            continue
+#        else:
+        Split = Split.append(temp, ignore_index = True)
+        if len(temp) == 1:
+            PropertyID2 = PropertyID2.append([df_final.PropertyID[i]], ignore_index = True)
+        else:
+            PropertyID2 = PropertyID2.append([df_final.PropertyID[i]]*len(temp), ignore_index = True)
+        tempCost = df_final["cost"][i].replace("$", "")
+        tempCost = tempCost.replace(",", "")
+        tempCost = tempCost.replace("\n", "")
+        tempCost = tempCost.split(" - ")
+        if len(tempCost) == 2:
+            MinCost = MinCost.append([int(tempCost[0])], ignore_index = True)
+            MaxCost = MaxCost.append([int(tempCost[1])], ignore_index = True)
+        elif "Included" in tempCost[0]:
+            MinCost = MinCost.append([0]*len(temp), ignore_index = True)
+            MaxCost = MaxCost.append([0]*len(temp), ignore_index = True)
+        elif "NA" == tempCost[0]:
+            MinCost = MinCost.append([math.nan], ignore_index = True)
+            MaxCost = MaxCost.append([math.nan], ignore_index = True)
+        else:
+            MinCost = MinCost.append([int(tempCost[0])], ignore_index = True)
+            MaxCost = MaxCost.append([int(tempCost[0])], ignore_index = True)
+
+        
+        #MinCost = MinCost.append([df_final["Cost"][i]]*len(temp), ignore_index = True)
+        
+        i+=1
+    
+    Split = pd.DataFrame(Split[0].apply(lambda x: x.strip()))
+    
+    df_final2 = pd.DataFrame()
+    df_final2["pid"] = PropertyID2[0]
+    df_final2["desc"] = Split[0]
+    df_final2["mincost"] = MinCost[0]
+    df_final2["maxcost"] = MaxCost[0]
+    
+    return(df_final2)
+
 #dfa = GetPetPolicy(AllCities)
 #dfa = GetParkingPolicy(dfa)
 #feat = GetFeatures(dfa)
@@ -605,12 +809,14 @@ def GetLivingSpace(df):
 #gym[0].unique()
 #kitchen[0].unique()
     
+#GymPivot = GymTest.pivot(index = "pid", columns = "gymfeat", values = "test").fillna(value = 0)
+    
 #TO DO
-# 1. One Time Fees
-# 2. Lease Info
-# 3. Services
-# 4. Property Info
-# 5. Indoor Info
-# 6. Outdoor Info
-# 7. Images
-# 8. Description
+# 1. One Time Fees (still needs work)
+# 2. Lease Info (not sure how to parse)
+# 3. Services (still needs work)
+# 4. Property Info (still needs work)
+# 5. Indoor Info (still needs work)
+# 6. Outdoor Info (still needs work)
+# 7. Images (number of images)
+# 8. Description (requires latin encoding)
