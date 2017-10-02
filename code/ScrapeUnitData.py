@@ -32,20 +32,20 @@ import pandas as pd # We will use this to read in the csv I sent out over email
 
 # You will need to change the directory here to point to wherever you are storing AllCities.csv
 # NOTE: I BELIEVE ON MAC YOU NEED TO USE FORWARD SLASHES INSTEAD OF BACKWARD SLASHES LIKE I DO (since I'm on Windows)
-#AllCities = pd.read_csv("C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Partly Cleaned September 24\\AllCities.csv", encoding = "latin-1")
+AllCities = pd.read_csv("C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Partly Cleaned September 24\\AllCities.csv", encoding = "latin-1")
 
 #i = 3000 #This is for Tanya (just remove the leading #)
 #i = 4500 #This is for Sanem (just remove the leading #) 
 i = 0 #This is for Maggie 
-while i < 504: #This is for Maggie, but for Tanya you'll need to change this to 4500 and for Sanem you'll need to change it to 6038 since we have 6037 properties in AllCities.csv
-    page = requests.get(df["Link"][i]) # This will scrape or get the html from the url in the ith row of the "Link" column in AllCities.sv
+while i < 1500: #This is for Maggie, but for Tanya you'll need to change this to 4500 and for Sanem you'll need to change it to 6038 since we have 6037 properties in AllCities.csv
+    page = requests.get(AllCities["Link"][i]) # This will scrape or get the html from the url in the ith row of the "Link" column in AllCities.sv
     
     # This will create a new HTML file
     # You just need to change the path to match to a path on your computer where you want to store the files
     # For example, if i = 0, this will create a file called PropertyID0.html in my folder called "Unit Data" and the path to my "Unit Data" folder is "C:\Users\NKallfa\Desktop\Documents\Georgetown Data Science Certificate\Capstone Project Data\Unit Data\"
     # We need to keep track of which property in AllCities.csv matches to the websites 
     # we scrape and that's what the '...PropertyID'+str(i)+ part does 
-    Html_file = open('C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Unit Data 2\\PropertyID'+str(i + 6037)+'.html', 'w')
+    Html_file = open('C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Unit Data 3\\PropertyID'+str(i)+'.html', 'w')
     Html_file.write(page.text) # This will write the html to the file you created in the previous line
     Html_file.close # This will just close the file we created 
     i+=1 #This will increase i by 1 so we continue going down the rows of the "Link" column in "AllCities.csv". After this we go back to the beginning of the while loop
