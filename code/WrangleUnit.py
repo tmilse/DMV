@@ -7,7 +7,7 @@ Created on Wed Sep 27 12:51:03 2017
 
 # ----------------------------------------- BEGIN FUNCTIONS -----------------------------------------#
 
-def Parse(path, i):
+def GetAvailableApts(path, i):
     
     # Import required packages
     from bs4 import BeautifulSoup
@@ -140,7 +140,7 @@ def Parse(path, i):
             MaxRent = math.nan
             MinSqFt = math.nan
             MaxSqFt = math.nan
-            Property = pd.DataFrame({"PropertyID" : PropertyID, "Beds" : Beds, "Baths" : Baths, "MinRent" : MinRent, "MaxRent" : MaxRent, "MinSqFt" : MinSqFt, "MaxSqFt" : MaxSqFt}, index = range(0,1))
+            Property = pd.DataFrame({"pid" : PropertyID, "bed" : Beds, "bath" : Baths, "minrent" : MinRent, "maxrent" : MaxRent, "minsqft" : MinSqFt, "maxsqft" : MaxSqFt}, index = range(0,1))
         
     # Now we try to extract local metro station information
     MetroStation = []
@@ -168,10 +168,10 @@ def Parse(path, i):
         MetroStation = ["None"]
         Distance = [math.nan]
         Time = [math.nan]
-        Transportation = pd.DataFrame({"PropertyID" : PropertyID, "MetroStation" : MetroStation,"Distance" : Distance, "Time" : Time})
+        Transportation = pd.DataFrame({"pid" : PropertyID, "station" : MetroStation,"distance" : Distance, "time" : Time})
     else: # Else there are nearby metro stations so we store those   
         PropertyID = [i]*len(MetroStation)
-        Transportation = pd.DataFrame({"PropertyID" : PropertyID, "MetroStation" : MetroStation,"Distance" : Distance, "Time" : Time})
+        Transportation = pd.DataFrame({"pid" : PropertyID, "station" : MetroStation,"distance" : Distance, "time" : Time})
     
     # Return property date and local metro transportation data
     return(Property, Transportation)
@@ -234,6 +234,15 @@ for file in files:
     Property.append(P) # Append unit-level data to list
     Transportation.append(T) # Append local metro station data to list
     
+# Append unit-level datand local metro station data to single data frame
+PropertyDF = pd.DataFrame()
+TransportationDF = pd.DataFrame
+
+for df in Property:
+    PropertyDF = PropertyDF.append(df, ignore_index = True)
+    
+for df in Transportation:
+    TransportationDF = TransportationDF.append(df, ignore_index = True)
 
 # Initialize list to store data
 Parent = []
@@ -256,3 +265,21 @@ for file in files:
     if i%100 == 0:
         print(i)
     i+=1
+
+ParentDF = pd.DataFrame()
+
+for df in Parent:
+    ParentDF = ParentDF.append(Property, ignore_index = True)
+
+# ----------------------------------------- END SCRIPT -----------------------------------------#
+""" ----------------------------------------- BEGIN THINGS TO DO -----------------------------------------
+
+1. Add Half Bath function
+2. Add function to get parent ID lookup table
+
+# ----------------------------------------- END THINGS TO DO -----------------------------------------"""
+
+
+# ----------------------------------------- BEGIN OLD CODE -----------------------------------------#
+
+# ----------------------------------------- END OLD CODE -----------------------------------------#

@@ -546,6 +546,10 @@ def GetFeatures(df, column):
     # Place data into output data frame
     outputDF["pid"] = pid[0]
     outputDF["feature"] = columnDF[0]
+    outputDF["value"] = [1]*len(outputDF)
+    
+    outputDF = outputDF.pivot(index = "pid", columns = "feature", values = "value").fillna(value = 0)
+
     
     # Return data frame
     return(outputDF)
@@ -642,16 +646,36 @@ def GetFees(df, column):
     outputDF["mincost"] = MinCost[0]
     outputDF["maxcost"] = MaxCost[0]
     
-#    if column == "One Time Fees":
-#        outputDF.loc[outputDF["desc"] == "Cat Deposit",  "desc"] = "Cat Fee"
-#        outputDF.loc[outputDF["desc"] == "Dog Deposit",  "desc"] = "Dog Fee"
-#        outputDF.loc[outputDF["desc"] == "Other",  "desc"] = "Other Fee"
-#        outputDF.loc[outputDF["desc"] == "Other Deposit",  "desc"] = "Other Fee"
-#        outputDF.loc[outputDF["desc"] == "Bird Deposit",  "desc"] = "Bird Fee"
-#        outputDF.loc[outputDF["desc"] == "Fish Deposit",  "desc"] = "Fish Fee"
-#        outputDF.loc[outputDF["desc"] == "Reptile Deposit",  "desc"] = "Reptile Fee"
-#    else:
-#        stuff = 2
+    if column == "One Time Fees":
+        outputDF.loc[outputDF["desc"] == "Cat Deposit",  "desc"] = "Cat Fee"
+        outputDF.loc[outputDF["desc"] == "Dog Deposit",  "desc"] = "Dog Fee"
+        outputDF.loc[outputDF["desc"] == "Other",  "desc"] = "Other Fee"
+        outputDF.loc[outputDF["desc"] == "Other Deposit",  "desc"] = "Other Fee"
+        outputDF.loc[outputDF["desc"] == "Bird Deposit",  "desc"] = "Bird Fee"
+        outputDF.loc[outputDF["desc"] == "Fish Deposit",  "desc"] = "Fish Fee"
+        outputDF.loc[outputDF["desc"] == "Reptile Deposit",  "desc"] = "Reptile Fee"
+    else:
+        outputDF.loc[outputDF["desc"] == "Unassigned Surface Lot Parking",  "desc"] = "Lot Parking Fee"
+        outputDF.loc[outputDF["desc"] == "Assigned Covered Parking",  "desc"] = "Covered Parking Fee"
+        outputDF.loc[outputDF["desc"] == "Trash Removal",  "desc"] = "Trash Removal Fee"
+        outputDF.loc[outputDF["desc"] == "Sewer",  "desc"] = "Sewer Fee"
+        outputDF.loc[outputDF["desc"] == "Assigned Surface Lot Parking",  "desc"] = "Lot Parking Fee"
+        outputDF.loc[outputDF["desc"] == "Gas",  "desc"] = "Gas Fee"
+        outputDF.loc[outputDF["desc"] == "Water",  "desc"] = "Water Fee"
+        outputDF.loc[outputDF["desc"] == "Unassigned Garage Parking",  "desc"] = "Covered Parking Fee"        
+        outputDF.loc[outputDF["desc"] == "Assigned Other Parking",  "desc"] = "Parking Fee"
+        outputDF.loc[outputDF["desc"] == "Unassigned Covered Parking",  "desc"] = "Covered Parking Fee"
+        outputDF.loc[outputDF["desc"] == "Electricity",  "desc"] = "Electricity Fee"
+        outputDF.loc[outputDF["desc"] == "Heat",  "desc"] = "Heat Fee"
+        outputDF.loc[outputDF["desc"] == "Air Conditioning",  "desc"] = "Air Conditioning Fee"
+        outputDF.loc[outputDF["desc"] == "Assigned Garage Parking",  "desc"] = "Covered Parking Fee"
+        outputDF.loc[outputDF["desc"] == "Unassigned Other Parking",  "desc"] = "Parking Fee"
+        outputDF.loc[outputDF["desc"] == "Cable",  "desc"] = "Cable Fee"
+        outputDF.loc[outputDF["desc"] == "Bird Rent",  "desc"] = "Bird Fee"
+        outputDF.loc[outputDF["desc"] == "Fish Rent",  "desc"] = "Fish Fee"
+        outputDF.loc[outputDF["desc"] == "Reptile Rent",  "desc"] = "Reptile Fee"
+        outputDF.loc[outputDF["desc"] == "Other Rent",  "desc"] = "Other Fee"
+        outputDF.loc[outputDF["desc"] == "Unassigned Street Parking",  "desc"] = "Street Parking Fee"
 
         
     # Return data frame
@@ -668,55 +692,68 @@ import re
 import numpy as np
 import os
 
-## -------------------------- Use the below code to get all data in its original form in a single data frame
-#DataList = requests.get("https://worm.nyc3.digitaloceanspaces.com/") # Request html from data store
-#soup = BeautifulSoup(DataList.text, "lxml") # Parse html
-#DataList = soup.find_all("key") # Find the name of each csv file and store
+### -------------------------- Use the below code to get all data in its original form in a single data frame
+##DataList = requests.get("https://worm.nyc3.digitaloceanspaces.com/") # Request html from data store
+##soup = BeautifulSoup(DataList.text, "lxml") # Parse html
+##DataList = soup.find_all("key") # Find the name of each csv file and store
+##
+### Initialize empty list to store url to files
+#Data = []
+##
+###Loop through csv files in list of data and append rest of url
+##for files in DataList:
+##    Data.append("https://worm.nyc3.digitaloceanspaces.com/"+files.text)
+#        
 #
-## Initialize empty list to store url to files
-Data = []
+## Locally
+#folderpath = "C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Capstone Project Original Data Copy\\"
 #
-##Loop through csv files in list of data and append rest of url
-#for files in DataList:
-#    Data.append("https://worm.nyc3.digitaloceanspaces.com/"+files.text)
-        
-
-# Locally
-folderpath = "C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Capstone Project Original Data Copy\\"
-
-for files in os.listdir(folderpath):
-    Data.append(folderpath+files)
-
-# Initialize empty data frame to store all original data in a single data frame
-df = pd.DataFrame()
-
-# Loop through all csv files and append 
-for files in Data:
-    tempDF = pd.read_csv(files, encoding = "latin-1")
-    df = df.append(tempDF, ignore_index = True) 
-# -------------------------- Use the above code to get all data in its original form in a single data frame
-
-# -------------------------- Use the below code to clean the data from its original form 
-Names = GetNames(df) # Gets the names of the properties
-Links = GetLinks(df) # Gets the link to property-level information 
-PropertyAddress = SplitAddresses(GetAddresses(df)) # Splits the address into street, city, state, zip
-Contact = SplitPhone(df)
-#df = DropCols(df) # Drops columns no longer necessary
-PetsAllowed = GetPetPolicy(df)
-Parking = GetParkingPolicy(df)
-Features = GetFeatures(df, "Features")
-Gym = GetFeatures(df, "Gym")
-Kitchen = GetFeatures(df, "Kitchen")
-Amenities = GetFeatures(df, "Amenities")
-LivingSpace = GetFeatures(df, "Living Space")
-Services = GetFeatures(df, "Services")
-PropertyInfo = GetFeatures(df, "Property Info")
-IndoorInfo = GetFeatures(df, "Indoor Info")
-OutdoorInfo = GetFeatures(df, "Outdoor Info")
-MonthlyFees = GetFees(df, "Monthly Fees")
-OneTimeFees = GetFees(df, "One Time Fees")
+#for files in os.listdir(folderpath):
+#    Data.append(folderpath+files)
+#
+## Initialize empty data frame to store all original data in a single data frame
+#df = pd.DataFrame()
+#
+## Loop through all csv files and append 
+#for files in Data:
+#    tempDF = pd.read_csv(files, encoding = "latin-1")
+#    df = df.append(tempDF, ignore_index = True) 
+## -------------------------- Use the above code to get all data in its original form in a single data frame
+#
+## -------------------------- Use the below code to clean the data from its original form 
+#Names = GetNames(df) # Gets the names of the properties
+#Links = GetLinks(df) # Gets the link to property-level information 
+#PropertyAddress = SplitAddresses(GetAddresses(df)) # Splits the address into street, city, state, zip
+#Contact = SplitPhone(df)
+##df = DropCols(df) # Drops columns no longer necessary
+#PetsAllowed = GetPetPolicy(df)
+#Parking = GetParkingPolicy(df)
+#Features = GetFeatures(df, "Features")
+#Gym = GetFeatures(df, "Gym")
+#Kitchen = GetFeatures(df, "Kitchen")
+#Amenities = GetFeatures(df, "Amenities")
+#LivingSpace = GetFeatures(df, "Living Space")
+#Services = GetFeatures(df, "Services")
+#PropertyInfo = GetFeatures(df, "Property Info")
+#IndoorInfo = GetFeatures(df, "Indoor Info")
+#OutdoorInfo = GetFeatures(df, "Outdoor Info")
+#MonthlyFees = GetFees(df, "Monthly Fees")
+#OneTimeFees = GetFees(df, "One Time Fees")
 # -------------------------- Use the above code to clean the data from its original form 
 # ----------------------------------------- END SCRIPT -----------------------------------------#
+
+""" ----------------------------------------- BEGIN THINGS TO DO -----------------------------------------
+
+1. Rename features in GetFees.py so that they are shorter
+2. Add function to extract number of images
+3. Change encoding of description column
+4. Should we try to parse the Lease column or just ignore it?
+5. Add feature to extract whether parking is assigned/unassigned
+6. Add function to remove instances that are in Fredericksburg, VA and Frederick MD. 
+
+# ----------------------------------------- END THINGS TO DO -----------------------------------------"""
+
+
 # ----------------------------------------- BEGIN OLD CODE -----------------------------------------#
         
 #def GetPetPolicy(df):
@@ -763,7 +800,7 @@ OneTimeFees = GetFees(df, "One Time Fees")
 #    df.insert(loc = 10, column = "Pet_Policy", value = petPolicy)
 #
 #    return(df)
-
+#
 #def GetGym(df):
 #    
 #    import pandas as pd
@@ -992,7 +1029,7 @@ OneTimeFees = GetFees(df, "One Time Fees")
 #    OutdoorInfoDF["outdoorfeat"] = outdoorinfoDF[0]
 #    
 #    return(OutdoorInfoDF)
-
+#
 #def GetMinMaxRent(df):
 #    
 #    # Import required packages
@@ -1059,7 +1096,7 @@ OneTimeFees = GetFees(df, "One Time Fees")
 #    df.insert(loc = 9, column = "Max_Sq_Ft", value = sqFtDF[1])
 #
 #    return(df)
-
+#
 #def GetOneTimeFees(df):
 #    
 #    import pandas as pd
@@ -1140,5 +1177,42 @@ OneTimeFees = GetFees(df, "One Time Fees")
 #    df_final2["maxcost"] = MaxCost[0]
 #    
 #    return(df_final2)
+#
+#def RenameColumns(df, column):
+#    
+#    import pandas as pd
+#    
+#    if column == "One Time Fees":
+#        df.loc[df["desc"] == "Cat Deposit",  "desc"] = "Cat Fee"
+#        df.loc[df["desc"] == "Dog Deposit",  "desc"] = "Dog Fee"
+#        df.loc[df["desc"] == "Other",  "desc"] = "Other Fee"
+#        df.loc[df["desc"] == "Other Deposit",  "desc"] = "Other Fee"
+#        df.loc[df["desc"] == "Bird Deposit",  "desc"] = "Bird Fee"
+#        df.loc[df["desc"] == "Fish Deposit",  "desc"] = "Fish Fee"
+#        df.loc[df["desc"] == "Reptile Deposit",  "desc"] = "Reptile Fee"
+#    else:
+#        df.loc[df["desc"] == "Unassigned Surface Lot Parking",  "desc"] = "Lot Parking Fee"
+#        df.loc[df["desc"] == "Assigned Covered Parking",  "desc"] = "Covered Parking Fee"
+#        df.loc[df["desc"] == "Trash Removal",  "desc"] = "Trash Removal Fee"
+#        df.loc[df["desc"] == "Sewer",  "desc"] = "Sewer Fee"
+#        df.loc[df["desc"] == "Assigned Surface Lot Parking",  "desc"] = "Lot Parking Fee"
+#        df.loc[df["desc"] == "Gas",  "desc"] = "Gas Fee"
+#        df.loc[df["desc"] == "Water",  "desc"] = "Water Fee"
+#        df.loc[df["desc"] == "Unassigned Garage Parking",  "desc"] = "Covered Parking Fee"        
+#        df.loc[df["desc"] == "Assigned Other Parking",  "desc"] = "Parking Fee"
+#        df.loc[df["desc"] == "Unassigned Covered Parking",  "desc"] = "Covered Parking Fee"
+#        df.loc[df["desc"] == "Electricity",  "desc"] = "Electricity Fee"
+#        df.loc[df["desc"] == "Heat",  "desc"] = "Heat Fee"
+#        df.loc[df["desc"] == "Air Conditioning",  "desc"] = "Air Conditioning Fee"
+#        df.loc[df["desc"] == "Assigned Garage Parking",  "desc"] = "Covered Parking Fee"
+#        df.loc[df["desc"] == "Unassigned Other Parking",  "desc"] = "Parking Fee"
+#        df.loc[df["desc"] == "Cable",  "desc"] = "Cable Fee"
+#        df.loc[df["desc"] == "Bird Rent",  "desc"] = "Bird Fee"
+#        df.loc[df["desc"] == "Fish Rent",  "desc"] = "Fish Fee"
+#        df.loc[df["desc"] == "Reptile Rent",  "desc"] = "Reptile Fee"
+#        df.loc[df["desc"] == "Other Rent",  "desc"] = "Other Fee"
+#        df.loc[df["desc"] == "Unassigned Street Parking",  "desc"] = "Street Parking Fee"
+#        
+#    return(df)
 
 # ----------------------------------------- END OLD CODE -----------------------------------------#
