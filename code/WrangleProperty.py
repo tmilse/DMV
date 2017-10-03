@@ -384,10 +384,10 @@ def GetParkingPolicy(df):
     
     # Initialize empty data frames. These will be binary columns that will be put into data frame as output
     CovPark = pd.DataFrame() # Covered parking
+    GarPark = pd.DataFrame() # Garage parking
     LotPark = pd.DataFrame() # Lot parking
     StrPark = pd.DataFrame() # Street parking
     OthPark = pd.DataFrame() # Other parking
-
 
     for parking in df["Parking"]:
         if isinstance(parking, str):
@@ -395,13 +395,15 @@ def GetParkingPolicy(df):
             # Property has lot and covered parking
             if "Surface Lot and Covered" in parking:
                 CovPark = CovPark.append([1], ignore_index = True)
+                GarPark = GarPark.append([0], ignore_index = True)
                 LotPark = LotPark.append([1], ignore_index = True)
                 StrPark = StrPark.append([0], ignore_index = True)
                 OthPark = OthPark.append([0], ignore_index = True)
 
             # Property has lot and covered parking
             elif "Surface Lot and Garage" in parking:
-                CovPark = CovPark.append([1], ignore_index = True)
+                CovPark = CovPark.append([0], ignore_index = True)
+                GarPark = GarPark.append([1], ignore_index = True)
                 LotPark = LotPark.append([1], ignore_index = True)
                 StrPark = StrPark.append([0], ignore_index = True)
                 OthPark = OthPark.append([0], ignore_index = True)
@@ -409,6 +411,7 @@ def GetParkingPolicy(df):
             # Property has lot and other (unknown) parking
             elif "Surface Lot and Other" in parking:
                 CovPark = CovPark.append([0], ignore_index = True)
+                GarPark = GarPark.append([0], ignore_index = True)
                 LotPark = LotPark.append([1], ignore_index = True)
                 StrPark = StrPark.append([0], ignore_index = True)
                 OthPark = OthPark.append([1], ignore_index = True)
@@ -416,6 +419,7 @@ def GetParkingPolicy(df):
             # Property has lot and street parking
             elif "Surface Lot and Street" in parking:
                 CovPark = CovPark.append([0], ignore_index = True)
+                GarPark = GarPark.append([0], ignore_index = True)
                 LotPark = LotPark.append([1], ignore_index = True)
                 StrPark = StrPark.append([1], ignore_index = True)
                 OthPark = OthPark.append([0], ignore_index = True)
@@ -423,6 +427,7 @@ def GetParkingPolicy(df):
             # Property has lot and covered parking
             elif "Surface Lot, Covered and Garage" in parking:
                 CovPark = CovPark.append([1], ignore_index = True)
+                GarPark = GarPark.append([1], ignore_index = True)
                 LotPark = LotPark.append([1], ignore_index = True)
                 StrPark = StrPark.append([0], ignore_index = True)
                 OthPark = OthPark.append([0], ignore_index = True)
@@ -430,6 +435,7 @@ def GetParkingPolicy(df):
             # Property has lot, covered, and other (unknown) parking
             elif "Surface Lot, Covered and Other" in parking:
                 CovPark = CovPark.append([1], ignore_index = True)
+                GarPark = GarPark.append([0], ignore_index = True)
                 LotPark = LotPark.append([1], ignore_index = True)
                 StrPark = StrPark.append([0], ignore_index = True)
                 OthPark = OthPark.append([1], ignore_index = True)
@@ -437,13 +443,15 @@ def GetParkingPolicy(df):
             # Property has lot, covered, and other (unknown) parking
             elif "Surface Lot, Covered, Garage and Other" in parking:
                 CovPark = CovPark.append([1], ignore_index = True)
+                GarPark = GarPark.append([1], ignore_index = True)
                 LotPark = LotPark.append([1], ignore_index = True)
                 StrPark = StrPark.append([0], ignore_index = True)
                 OthPark = OthPark.append([1], ignore_index = True)
 
             # Property has lot, covered, and other (unknown) parking
             elif "Surface Lot, Garage and Other" in parking:
-                CovPark = CovPark.append([1], ignore_index = True)
+                CovPark = CovPark.append([0], ignore_index = True)
+                GarPark = GarPark.append([1], ignore_index = True)
                 LotPark = LotPark.append([1], ignore_index = True)
                 StrPark = StrPark.append([0], ignore_index = True)
                 OthPark = OthPark.append([1], ignore_index = True)
@@ -451,13 +459,15 @@ def GetParkingPolicy(df):
             # Property has covered parking
             elif "Covered" in parking:
                 CovPark = CovPark.append([1], ignore_index = True)
+                GarPark = GarPark.append([0], ignore_index = True)
                 LotPark = LotPark.append([0], ignore_index = True)
                 StrPark = StrPark.append([0], ignore_index = True)
                 OthPark = OthPark.append([0], ignore_index = True)
 
             # Property has covered parking
             elif "Garage" in parking:
-                CovPark = CovPark.append([1], ignore_index = True)
+                CovPark = CovPark.append([0], ignore_index = True)
+                GarPark = GarPark.append([1], ignore_index = True)
                 LotPark = LotPark.append([0], ignore_index = True)
                 StrPark = StrPark.append([0], ignore_index = True)
                 OthPark = OthPark.append([0], ignore_index = True)
@@ -465,6 +475,7 @@ def GetParkingPolicy(df):
             # Property has street parking
             elif "Street" in parking:
                 CovPark = CovPark.append([0], ignore_index = True)
+                GarPark = GarPark.append([0], ignore_index = True)
                 LotPark = LotPark.append([0], ignore_index = True)
                 StrPark = StrPark.append([1], ignore_index = True)
                 OthPark = OthPark.append([0], ignore_index = True)
@@ -472,6 +483,7 @@ def GetParkingPolicy(df):
             # Property has other (unknown) parking
             elif "Other" in parking:
                 CovPark = CovPark.append([0], ignore_index = True)
+                GarPark = GarPark.append([0], ignore_index = True)
                 LotPark = LotPark.append([0], ignore_index = True)
                 StrPark = StrPark.append([0], ignore_index = True)
                 OthPark = OthPark.append([1], ignore_index = True)
@@ -479,6 +491,7 @@ def GetParkingPolicy(df):
             # Property has lot parking
             elif "Surface Lot" in parking:
                 CovPark = CovPark.append([0], ignore_index = True)
+                GarPark = GarPark.append([0], ignore_index = True)
                 LotPark = LotPark.append([1], ignore_index = True)
                 StrPark = StrPark.append([0], ignore_index = True)
                 OthPark = OthPark.append([0], ignore_index = True)
@@ -486,6 +499,7 @@ def GetParkingPolicy(df):
         # Otherwise we have no information on the parking at the property
         else:
             CovPark = CovPark.append([0], ignore_index = True)
+            GarPark = GarPark.append([0], ignore_index = True)
             LotPark = LotPark.append([0], ignore_index = True)
             StrPark = StrPark.append([0], ignore_index = True)
             OthPark = OthPark.append([1], ignore_index = True)
@@ -497,6 +511,7 @@ def GetParkingPolicy(df):
     # Place data into output data frame
     outputDF["pid"] = range(0, L)
     outputDF["covpark"] = CovPark[0]
+    outputDF["garpark"] = GarPark[0]
     outputDF["lotpark"] = LotPark[0]
     outputDF["stpark"] = StrPark[0]
     outputDF["unkpark"] = OthPark[0]
@@ -595,8 +610,8 @@ def GetFeatures(df, column):
         outputDF.loc[outputDF["feature"] == "Putting Greens",  "feature"] = "putgreen"
         outputDF.loc[outputDF["feature"] == "Sport Court",  "feature"] = "sportct"
     
-    outputDF = outputDF.pivot(index = "pid", columns = "feature", values = "value").fillna(value = 0)
-    outputDF.insert(loc = 0, column = "pid", value = range(0, len(df)))
+    #outputDF = outputDF.pivot(index = "pid", columns = "feature", values = "value").fillna(value = 0)
+    #outputDF.insert(loc = 0, column = "pid", value = range(0, len(df)))
 
     
     # Return data frame
@@ -695,42 +710,51 @@ def GetFees(df, column):
     outputDF["maxcost"] = MaxCost[0]
     
     if column == "One Time Fees":
-        outputDF.loc[outputDF["desc"] == "Cat Deposit",  "desc"] = "Cat Fee"
-        outputDF.loc[outputDF["desc"] == "Dog Deposit",  "desc"] = "Dog Fee"
-        outputDF.loc[outputDF["desc"] == "Other",  "desc"] = "Other Fee"
-        outputDF.loc[outputDF["desc"] == "Other Deposit",  "desc"] = "Other Fee"
-        outputDF.loc[outputDF["desc"] == "Bird Deposit",  "desc"] = "Bird Fee"
-        outputDF.loc[outputDF["desc"] == "Fish Deposit",  "desc"] = "Fish Fee"
-        outputDF.loc[outputDF["desc"] == "Reptile Deposit",  "desc"] = "Reptile Fee"
+        outputDF.loc[outputDF["desc"] == "Cat Deposit",  "desc"] = "dog"
+        outputDF.loc[outputDF["desc"] == "Dog Deposit",  "desc"] = "cat"
+        outputDF.loc[outputDF["desc"] == "Other",  "desc"] = "unknown"
+        outputDF.loc[outputDF["desc"] == "Other Deposit",  "desc"] = "other"
+        outputDF.loc[outputDF["desc"] == "Bird Deposit",  "desc"] = "bird"
+        outputDF.loc[outputDF["desc"] == "Fish Deposit",  "desc"] = "fish"
+        outputDF.loc[outputDF["desc"] == "Reptile Deposit",  "desc"] = "reptile"
     else:
-        outputDF.loc[outputDF["desc"] == "Unassigned Surface Lot Parking",  "desc"] = "Lot Parking Fee"
-        outputDF.loc[outputDF["desc"] == "Assigned Covered Parking",  "desc"] = "Covered Parking Fee"
-        outputDF.loc[outputDF["desc"] == "Trash Removal",  "desc"] = "Trash Removal Fee"
-        outputDF.loc[outputDF["desc"] == "Sewer",  "desc"] = "Sewer Fee"
-        outputDF.loc[outputDF["desc"] == "Assigned Surface Lot Parking",  "desc"] = "Lot Parking Fee"
-        outputDF.loc[outputDF["desc"] == "Gas",  "desc"] = "Gas Fee"
-        outputDF.loc[outputDF["desc"] == "Water",  "desc"] = "Water Fee"
-        outputDF.loc[outputDF["desc"] == "Unassigned Garage Parking",  "desc"] = "Covered Parking Fee"        
-        outputDF.loc[outputDF["desc"] == "Assigned Other Parking",  "desc"] = "Parking Fee"
-        outputDF.loc[outputDF["desc"] == "Unassigned Covered Parking",  "desc"] = "Covered Parking Fee"
-        outputDF.loc[outputDF["desc"] == "Electricity",  "desc"] = "Electricity Fee"
-        outputDF.loc[outputDF["desc"] == "Heat",  "desc"] = "Heat Fee"
-        outputDF.loc[outputDF["desc"] == "Air Conditioning",  "desc"] = "Air Conditioning Fee"
-        outputDF.loc[outputDF["desc"] == "Assigned Garage Parking",  "desc"] = "Covered Parking Fee"
-        outputDF.loc[outputDF["desc"] == "Unassigned Other Parking",  "desc"] = "Parking Fee"
-        outputDF.loc[outputDF["desc"] == "Cable",  "desc"] = "Cable Fee"
-        outputDF.loc[outputDF["desc"] == "Bird Rent",  "desc"] = "Bird Fee"
-        outputDF.loc[outputDF["desc"] == "Fish Rent",  "desc"] = "Fish Fee"
-        outputDF.loc[outputDF["desc"] == "Reptile Rent",  "desc"] = "Reptile Fee"
-        outputDF.loc[outputDF["desc"] == "Other Rent",  "desc"] = "Other Fee"
-        outputDF.loc[outputDF["desc"] == "Unassigned Street Parking",  "desc"] = "Street Parking Fee"
+        outputDF.loc[outputDF["desc"] == "Unassigned Surface Lot Parking",  "desc"] = "unlotpark"
+        outputDF.loc[outputDF["desc"] == "Assigned Covered Parking",  "desc"] = "ascovpark"
+        outputDF.loc[outputDF["desc"] == "Trash Removal",  "desc"] = "trashrem"
+        outputDF.loc[outputDF["desc"] == "Sewer",  "desc"] = "sewer"
+        outputDF.loc[outputDF["desc"] == "Assigned Surface Lot Parking",  "desc"] = "aslotpark"
+        outputDF.loc[outputDF["desc"] == "Gas",  "desc"] = "gas"
+        outputDF.loc[outputDF["desc"] == "Water",  "desc"] = "water"
+        outputDF.loc[outputDF["desc"] == "Unassigned Garage Parking",  "desc"] = "ungarpark"        
+        outputDF.loc[outputDF["desc"] == "Assigned Other Parking",  "desc"] = "asotherpark"
+        outputDF.loc[outputDF["desc"] == "Unassigned Covered Parking",  "desc"] = "uncovpark"
+        outputDF.loc[outputDF["desc"] == "Electricity",  "desc"] = "elect"
+        outputDF.loc[outputDF["desc"] == "Heat",  "desc"] = "heat"
+        outputDF.loc[outputDF["desc"] == "Air Conditioning",  "desc"] = "ac"
+        outputDF.loc[outputDF["desc"] == "Assigned Garage Parking",  "desc"] = "asgarpark"
+        outputDF.loc[outputDF["desc"] == "Unassigned Other Parking",  "desc"] = "unotherpark"
+        outputDF.loc[outputDF["desc"] == "Cable",  "desc"] = "cable"
+        outputDF.loc[outputDF["desc"] == "Bird Rent",  "desc"] = "bird"
+        outputDF.loc[outputDF["desc"] == "Fish Rent",  "desc"] = "fish"
+        outputDF.loc[outputDF["desc"] == "Reptile Rent",  "desc"] = "reptile"
+        outputDF.loc[outputDF["desc"] == "Other Rent",  "desc"] = "otherfee"
+        outputDF.loc[outputDF["desc"] == "Unassigned Street Parking",  "desc"] = "stpark"
+        outputDF.loc[outputDF["desc"] == "Dog Rent",  "desc"] = "cat"
+        outputDF.loc[outputDF["desc"] == "Cat Rent",  "desc"] = "dog"
+        outputDF.loc[outputDF["desc"] == "Storage Fee",  "desc"] = "storage"
+        outputDF.loc[outputDF["desc"] == "NA",  "desc"] = "na"
 
-    #output_mincostDF = outputDF.pivot(index = "pid", columns = "desc", values = "mincost").fillna(value = 0)
-    #output_maxcostDF = outputDF.pivot(index = "pid", columns = "desc", values = "maxcost").fillna(value = 0)
+    # Pivot table for minimum cost and pivote table for maximum cost
+    output_mincostDF = outputDF.pivot(index = "pid", columns = "desc", values = "mincost")
+    output_maxcostDF = outputDF.pivot(index = "pid", columns = "desc", values = "maxcost")
+    
+    # Insert Property ID column in each table
+    output_mincostDF.insert(loc = 0, column = "pid", value = range(0, len(df)))
+    output_maxcostDF.insert(loc = 0, column = "pid", value = range(0, len(df)))
 
         
-    # Return data frame
-    return(outputDF)
+    # Return data frames
+    return(output_mincostDF, output_maxcostDF)
         
 # ----------------------------------------- END FUNCTIONS -----------------------------------------#
 # ----------------------------------------- BEGIN SCRIPT -----------------------------------------#
@@ -807,6 +831,8 @@ import os
 
 # ----------------------------------------- BEGIN OLD CODE -----------------------------------------#
         
+#test = AllCities.loc[(AllCities["City"] == " Fredericksburg") | (AllCities["City"] == " Frederick")]
+
 #def GetPetPolicy(df):
 #    
 #    # Import required packages
