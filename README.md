@@ -9,6 +9,6 @@ This is the repository for our group's capstone project code as part of cohort 1
     3. Wrangle property data
     4. Scrape unit data
     5. Wrangle unit data
-    6. Store all raw data into AWS
-    7. Store cleaned data into AWS
+    6. Store all raw data in AWS
+    7. Store cleaned data in AWS
 
