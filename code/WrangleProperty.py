@@ -548,7 +548,55 @@ def GetFeatures(df, column):
     outputDF["feature"] = columnDF[0]
     outputDF["value"] = [1]*len(outputDF)
     
+    if column == "Features":
+        outputDF.loc[outputDF["feature"] == "Washer/Dryer",  "feature"] = "washdry"
+        outputDF.loc[outputDF["feature"] == "Air Conditioning",  "feature"] = "ac"
+        outputDF.loc[outputDF["feature"] == "Ceiling Fans",  "feature"] = "ceilfans"
+        outputDF.loc[outputDF["feature"] == "Cable Ready",  "feature"] = "cableready"
+        outputDF.loc[outputDF["feature"] == "Fireplace",  "feature"] = "fireplace"
+        outputDF.loc[outputDF["feature"] == "Alarm",  "feature"] = "alarm"
+        outputDF.loc[outputDF["feature"] == "Storage Units",  "feature"] = "storage"
+        outputDF.loc[outputDF["feature"] == "High Speed Internet Access",  "feature"] = "hsinternet"
+        outputDF.loc[outputDF["feature"] == "Wi-Fi",  "feature"] = "wifi"
+        outputDF.loc[outputDF["feature"] == "Heating",  "feature"] = "heating"
+        outputDF.loc[outputDF["feature"] == "Tub/Shower",  "feature"] = "tubshower"
+        outputDF.loc[outputDF["feature"] == "Sprinkler System",  "feature"] = "sprinklers"
+        outputDF.loc[outputDF["feature"] == "Smoke Free",  "feature"] = "smokefree"
+        outputDF.loc[outputDF["feature"] == "Satellite TV",  "feature"] = "sattv"
+        outputDF.loc[outputDF["feature"] == "Wheelchair Accessible (Rooms)",  "feature"] = "wheelchacc"
+        outputDF.loc[outputDF["feature"] == "Handrails",  "feature"] = "handrail"
+        outputDF.loc[outputDF["feature"] == "Framed Mirrors",  "feature"] = "framedmirror"
+        outputDF.loc[outputDF["feature"] == "Trash Compactor",  "feature"] = "trashcompact"
+        outputDF.loc[outputDF["feature"] == "Washer/Dryer Hookup",  "feature"] = "washdryhookup"
+        outputDF.loc[outputDF["feature"] == "Intercom",  "feature"] = "intercom"
+        outputDF.loc[outputDF["feature"] == "Double Vanities",  "feature"] = "doublevanities"
+        outputDF.loc[outputDF["feature"] == "Vacuum System",  "feature"] = "vacuumsys"
+        outputDF.loc[outputDF["feature"] == "Surround Sound",  "feature"] = "ssound"
+    elif column == "Gym":
+        outputDF.loc[outputDF["feature"] == "Fitness Center",  "feature"] = "fitcenter"
+        outputDF.loc[outputDF["feature"] == "Sauna",  "feature"] = "sauna"
+        outputDF.loc[outputDF["feature"] == "Spa",  "feature"] = "spa"
+        outputDF.loc[outputDF["feature"] == "Pool",  "feature"] = "pool"
+        outputDF.loc[outputDF["feature"] == "Playground",  "feature"] = "playground"
+        outputDF.loc[outputDF["feature"] == "Basketball Court",  "feature"] = "bballct"
+        outputDF.loc[outputDF["feature"] == "Racquetball Court",  "feature"] = "rballct"
+        outputDF.loc[outputDF["feature"] == "Tennis Court",  "feature"] = "tennisct"        
+        outputDF.loc[outputDF["feature"] == "Cardio Machines",  "feature"] = "cardiomach"
+        outputDF.loc[outputDF["feature"] == "Free Weights",  "feature"] = "freewghts"
+        outputDF.loc[outputDF["feature"] == "Weight Machines",  "feature"] = "wghtmach"
+        outputDF.loc[outputDF["feature"] == "Bike Storage",  "feature"] = "bikestore"
+        outputDF.loc[outputDF["feature"] == "Gameroom",  "feature"] = "gameroom"
+        outputDF.loc[outputDF["feature"] == "Fitness Programs",  "feature"] = "fitprog"
+        outputDF.loc[outputDF["feature"] == "Volleyball Court",  "feature"] = "vballct"
+        outputDF.loc[outputDF["feature"] == "Gaming Stations",  "feature"] = "gamestation"
+        outputDF.loc[outputDF["feature"] == "Media Center/Movie Theatre",  "feature"] = "mediacenter"
+        outputDF.loc[outputDF["feature"] == "Walking/Biking Trails",  "feature"] = "trails"
+        outputDF.loc[outputDF["feature"] == "Health Club Facility",  "feature"] = "healthclub"
+        outputDF.loc[outputDF["feature"] == "Putting Greens",  "feature"] = "putgreen"
+        outputDF.loc[outputDF["feature"] == "Sport Court",  "feature"] = "sportct"
+    
     outputDF = outputDF.pivot(index = "pid", columns = "feature", values = "value").fillna(value = 0)
+    outputDF.insert(loc = 0, column = "pid", value = range(0, len(df)))
 
     
     # Return data frame
@@ -676,6 +724,9 @@ def GetFees(df, column):
         outputDF.loc[outputDF["desc"] == "Reptile Rent",  "desc"] = "Reptile Fee"
         outputDF.loc[outputDF["desc"] == "Other Rent",  "desc"] = "Other Fee"
         outputDF.loc[outputDF["desc"] == "Unassigned Street Parking",  "desc"] = "Street Parking Fee"
+
+    #output_mincostDF = outputDF.pivot(index = "pid", columns = "desc", values = "mincost").fillna(value = 0)
+    #output_maxcostDF = outputDF.pivot(index = "pid", columns = "desc", values = "maxcost").fillna(value = 0)
 
         
     # Return data frame
