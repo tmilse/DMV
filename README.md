@@ -4,10 +4,10 @@ This is the repository for our group's capstone project code as part of cohort 1
 
 ## To Do
 
- * 1. Get an AWS Database 
- * 2. Download census data (should not be all of these, only some from this list) Note: Use [American Fact Finder Guided Search](https://factfinder.census.gov/faces/nav/jsf/pages/guided_search.xhtml)
-   * 2.1. Age and Sex / Aging
-    2.2. Ancestry
+ * Get an AWS Database 
+ * Download census data (should not be all of these, only some from this list) Note: Use [American Fact Finder Guided Search](https://factfinder.census.gov/faces/nav/jsf/pages/guided_search.xhtml)
+    * Age and Sex / Aging
+    * 2.2. Ancestry
     2.3. Disability
     2.4. Commuting to Work
     2.5. Education
