@@ -16,6 +16,21 @@ def DropCols(df):
     
     # Return dataframe
     return(df)
+
+def RemoveDuplicates(df):
+
+    import os
+    
+    index = []
+    
+    for i in range(0, len(df)):
+        if os.path.isfile("C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Unit Data Rename\\PropertyID"+str(i)+".html") == True:
+            index.append(i)
+    
+    outputDF = df.loc[index,:]
+    outputDF.index = range(0, len(outputDF))
+    
+    return(outputDF)
     
 def GetNames(df):
     
@@ -564,6 +579,7 @@ def GetFeatures(df, column):
     outputDF["value"] = [1]*len(outputDF)
     
     if column == "Features":
+        outputDF.loc[outputDF["feature"] == "NA",  "feature"] = "na"
         outputDF.loc[outputDF["feature"] == "Washer/Dryer",  "feature"] = "washdry"
         outputDF.loc[outputDF["feature"] == "Air Conditioning",  "feature"] = "ac"
         outputDF.loc[outputDF["feature"] == "Ceiling Fans",  "feature"] = "ceilfans"
@@ -588,6 +604,7 @@ def GetFeatures(df, column):
         outputDF.loc[outputDF["feature"] == "Vacuum System",  "feature"] = "vacuumsys"
         outputDF.loc[outputDF["feature"] == "Surround Sound",  "feature"] = "ssound"
     elif column == "Gym":
+        outputDF.loc[outputDF["feature"] == "NA",  "feature"] = "na"
         outputDF.loc[outputDF["feature"] == "Fitness Center",  "feature"] = "fitcenter"
         outputDF.loc[outputDF["feature"] == "Sauna",  "feature"] = "sauna"
         outputDF.loc[outputDF["feature"] == "Spa",  "feature"] = "spa"
@@ -609,9 +626,148 @@ def GetFeatures(df, column):
         outputDF.loc[outputDF["feature"] == "Health Club Facility",  "feature"] = "healthclub"
         outputDF.loc[outputDF["feature"] == "Putting Greens",  "feature"] = "putgreen"
         outputDF.loc[outputDF["feature"] == "Sport Court",  "feature"] = "sportct"
+    elif column == "Kitchen":
+        outputDF.loc[outputDF["feature"] == "NA",  "feature"] = "na"
+        outputDF.loc[outputDF["feature"] == "Dishwasher",  "feature"] = "dwasher"
+        outputDF.loc[outputDF["feature"] == "Disposal",  "feature"] = "disposal"
+        outputDF.loc[outputDF["feature"] == "Granite Countertops",  "feature"] = "granctops"
+        outputDF.loc[outputDF["feature"] == "Stainless Steel Appliances",  "feature"] = "ssteelapp"
+        outputDF.loc[outputDF["feature"] == "Kitchen",  "feature"] = "kitchen"
+        outputDF.loc[outputDF["feature"] == "Microwave",  "feature"] = "microwave"
+        outputDF.loc[outputDF["feature"] == "Refrigerator",  "feature"] = "fridge"        
+        outputDF.loc[outputDF["feature"] == "Ice Maker",  "feature"] = "icemaker"
+        outputDF.loc[outputDF["feature"] == "Range",  "feature"] = "range"
+        outputDF.loc[outputDF["feature"] == "Island Kitchen",  "feature"] = "islandkitch"
+        outputDF.loc[outputDF["feature"] == "Pantry",  "feature"] = "pantry"
+        outputDF.loc[outputDF["feature"] == "Oven",  "feature"] = "oven"
+        outputDF.loc[outputDF["feature"] == "Freezer",  "feature"] = "freezer"
+        outputDF.loc[outputDF["feature"] == "Warming Drawer",  "feature"] = "warmdrawer"
+        outputDF.loc[outputDF["feature"] == "Eat-in Kitchen",  "feature"] = "eatinkitch"
+        outputDF.loc[outputDF["feature"] == "Instant Hot Water",  "feature"] = "insthotwater"
+        outputDF.loc[outputDF["feature"] == "Coffee System",  "feature"] = "coffeesys"
+        outputDF.loc[outputDF["feature"] == "Breakfast Nook",  "feature"] = "breaknook"
+    elif column == "Living Space":
+        outputDF.loc[outputDF["feature"] == "Walk-In Closets",  "feature"] = "walkincloset"
+        outputDF.loc[outputDF["feature"] == "NA",  "feature"] = "na"
+        outputDF.loc[outputDF["feature"] == "Hardwood Floors",  "feature"] = "hwoodfloor"
+        outputDF.loc[outputDF["feature"] == "Carpet",  "feature"] = "carpet"
+        outputDF.loc[outputDF["feature"] == "Bay Window",  "feature"] = "baywindow"
+        outputDF.loc[outputDF["feature"] == "Views",  "feature"] = "views"
+        outputDF.loc[outputDF["feature"] == "Window Coverings",  "feature"] = "windowcov"
+        outputDF.loc[outputDF["feature"] == "Tile Floors",  "feature"] = "tilefloor"        
+        outputDF.loc[outputDF["feature"] == "Linen Closet",  "feature"] = "linencloset"
+        outputDF.loc[outputDF["feature"] == "Vaulted Ceiling",  "feature"] = "vceil"
+        outputDF.loc[outputDF["feature"] == "Vinyl Flooring",  "feature"] = "vfloor"
+        outputDF.loc[outputDF["feature"] == "Dining Room",  "feature"] = "diningrm"
+        outputDF.loc[outputDF["feature"] == "Den",  "feature"] = "den"
+        outputDF.loc[outputDF["feature"] == "Sunroom",  "feature"] = "sunrm"
+        outputDF.loc[outputDF["feature"] == "Loft Layout",  "feature"] = "loft"
+        outputDF.loc[outputDF["feature"] == "Accent Walls",  "feature"] = "accentwalls"
+        outputDF.loc[outputDF["feature"] == "Skylight",  "feature"] = "skylight"
+        outputDF.loc[outputDF["feature"] == "Furnished",  "feature"] = "furnished"
+        outputDF.loc[outputDF["feature"] == "Office",  "feature"] = "office"
+        outputDF.loc[outputDF["feature"] == "Crown Molding",  "feature"] = "crownmold"
+        outputDF.loc[outputDF["feature"] == "Double Pane Windows",  "feature"] = "doublepw"
+        outputDF.loc[outputDF["feature"] == "Basement",  "feature"] = "basement"
+        outputDF.loc[outputDF["feature"] == "Built-In Bookshelves",  "feature"] = "bshelves"
+        outputDF.loc[outputDF["feature"] == "Attic",  "feature"] = "attic"
+        outputDF.loc[outputDF["feature"] == "Wet Bar",  "feature"] = "wetbar"
+        outputDF.loc[outputDF["feature"] == "Family Room",  "feature"] = "famrm"
+        outputDF.loc[outputDF["feature"] == "Recreation Room",  "feature"] = "recrm"
+        outputDF.loc[outputDF["feature"] == "Mother-in-law Unit",  "feature"] = "mothlawunit"
+        outputDF.loc[outputDF["feature"] == "Mud Room",  "feature"] = "mudrm"
+    elif column == "Services":
+        outputDF.loc[outputDF["feature"] == "NA",  "feature"] = "na"
+        outputDF.loc[outputDF["feature"] == "Package Service",  "feature"] = "packserv"
+        outputDF.loc[outputDF["feature"] == "Maintenance on site",  "feature"] = "onsitemaint"
+        outputDF.loc[outputDF["feature"] == "Concierge",  "feature"] = "concierge"
+        outputDF.loc[outputDF["feature"] == "24 Hour Availability",  "feature"] = "avail24hr"
+        outputDF.loc[outputDF["feature"] == "Recycling",  "feature"] = "recycling"
+        outputDF.loc[outputDF["feature"] == "Renters Insurance Program",  "feature"] = "rentins"
+        outputDF.loc[outputDF["feature"] == "Dry Cleaning Service",  "feature"] = "dryclean"        
+        outputDF.loc[outputDF["feature"] == "Online Services",  "feature"] = "onlineserv"
+        outputDF.loc[outputDF["feature"] == "Pet Play Area",  "feature"] = "petplay"
+        outputDF.loc[outputDF["feature"] == "Pet Care",  "feature"] = "petcare"
+        outputDF.loc[outputDF["feature"] == "Controlled Access",  "feature"] = "accesscontr"
+        outputDF.loc[outputDF["feature"] == "On-Site ATM",  "feature"] = "atm"
+        outputDF.loc[outputDF["feature"] == "Laundry Facilities",  "feature"] = "laundry"
+        outputDF.loc[outputDF["feature"] == "Community-Wide WiFi",  "feature"] = "commwifi"
+        outputDF.loc[outputDF["feature"] == "Bilingual",  "feature"] = "bilingual"
+        outputDF.loc[outputDF["feature"] == "Courtesy Patrol",  "feature"] = "patrol"
+        outputDF.loc[outputDF["feature"] == "Guest Apartment",  "feature"] = "guestapt"
+        outputDF.loc[outputDF["feature"] == "Car Wash Area",  "feature"] = "carwash"
+        outputDF.loc[outputDF["feature"] == "Energy Star Certified",  "feature"] = "energystar"
+        outputDF.loc[outputDF["feature"] == "Pet Washing Station",  "feature"] = "petwash"
+        outputDF.loc[outputDF["feature"] == "Car Charging Station",  "feature"] = "carcharge"
+        outputDF.loc[outputDF["feature"] == "Property Manager on Site",  "feature"] = "onsitepropman"
+        outputDF.loc[outputDF["feature"] == "Furnished Units Available",  "feature"] = "furnishavail"
+        outputDF.loc[outputDF["feature"] == "Wi-Fi at Pool and Clubhouse",  "feature"] = "clubpoolwifi"
+        outputDF.loc[outputDF["feature"] == "Trash Pickup - Door to Door",  "feature"] = "ddtrash"
+        outputDF.loc[outputDF["feature"] == "Planned Social Activities",  "feature"] = "social"
+        outputDF.loc[outputDF["feature"] == "Laundry Service",  "feature"] = "laundryservice"
+        outputDF.loc[outputDF["feature"] == "Shuttle to Train",  "feature"] = "shuttle"
+        outputDF.loc[outputDF["feature"] == "Health Club Discount",  "feature"] = "hclubdisc"
+        outputDF.loc[outputDF["feature"] == "LEED Rating",  "feature"] = "leedrt"
+        outputDF.loc[outputDF["feature"] == "On-Site Retail",  "feature"] = "onsiteretail"
+        outputDF.loc[outputDF["feature"] == "Grocery Service",  "feature"] = "groceryserv"
+        outputDF.loc[outputDF["feature"] == "Maid Service",  "feature"] = "maidserv"
+        outputDF.loc[outputDF["feature"] == "Meal Service",  "feature"] = "mealserv"
+        outputDF.loc[outputDF["feature"] == "Day Care",  "feature"] = "daycare"
+        outputDF.loc[outputDF["feature"] == "Security System",  "feature"] = "securitysys"
+        outputDF.loc[outputDF["feature"] == "House Sitter Services",  "feature"] = "housesitserv"
+        outputDF.loc[outputDF["feature"] == "Video Patrol",  "feature"] = "videopatrol"
+        outputDF.loc[outputDF["feature"] == "Local Vet / Pet Store Discount",  "feature"] = "petstoredisc"
+        outputDF.loc[outputDF["feature"] == "Parking Security",  "feature"] = "parksec"
+        outputDF.loc[outputDF["feature"] == "Doorman",  "feature"] = "doorman"
+        outputDF.loc[outputDF["feature"] == "Trash Pickup - Curbside",  "feature"] = "cstrash"
+        outputDF.loc[outputDF["feature"] == "Composting",  "feature"] = "compost"
+        outputDF.loc[outputDF["feature"] == "Hearing Impaired Accessible",  "feature"] = "hearimpacc"
+        outputDF.loc[outputDF["feature"] == "Vision Impaired Accessible",  "feature"] = "visimpacc"
+        outputDF.loc[outputDF["feature"] == "Per Diem Accepted",  "feature"] = "perdiem"
+    elif column == "Indoor Info":
+        outputDF.loc[outputDF["feature"] == "Business Center",  "feature"] = "businesscent"
+        outputDF.loc[outputDF["feature"] == "Storage Space",  "feature"] = "storagespace"
+        outputDF.loc[outputDF["feature"] == "NA",  "feature"] = "na"
+        outputDF.loc[outputDF["feature"] == "Clubhouse",  "feature"] = "clubhouse"
+        outputDF.loc[outputDF["feature"] == "Elevator",  "feature"] = "elevator"
+        outputDF.loc[outputDF["feature"] == "Lounge",  "feature"] = "lounge"
+        outputDF.loc[outputDF["feature"] == "Conference Room",  "feature"] = "confrm"
+        outputDF.loc[outputDF["feature"] == "Coffee Bar",  "feature"] = "coffeebar"        
+        outputDF.loc[outputDF["feature"] == "Multi Use Room",  "feature"] = "multiuserm"
+        outputDF.loc[outputDF["feature"] == "Disposal Chutes",  "feature"] = "dispchutes"
+        outputDF.loc[outputDF["feature"] == "Library",  "feature"] = "library"
+        outputDF.loc[outputDF["feature"] == "Corporate Suites",  "feature"] = "corpsuite"
+        outputDF.loc[outputDF["feature"] == "Breakfast/Coffee Concierge",  "feature"] = "bcconcierge"
+        outputDF.loc[outputDF["feature"] == "Two Story Lobby",  "feature"] = "twostorylobby"
+        outputDF.loc[outputDF["feature"] == "Vintage Building",  "feature"] = "vintage"
+        outputDF.loc[outputDF["feature"] == "Tanning Salon",  "feature"] = "tanningsal"
+    elif column == "Outdoor Info":
+        outputDF.loc[outputDF["feature"] == "Gated",  "feature"] = "gated"
+        outputDF.loc[outputDF["feature"] == "NA",  "feature"] = "na"
+        outputDF.loc[outputDF["feature"] == "Boat Docks",  "feature"] = "boatdock"
+        outputDF.loc[outputDF["feature"] == "Cabana",  "feature"] = "cabana"
+        outputDF.loc[outputDF["feature"] == "Sundeck",  "feature"] = "sundeck"
+        outputDF.loc[outputDF["feature"] == "Balcony",  "feature"] = "balcony"
+        outputDF.loc[outputDF["feature"] == "Lake Access",  "feature"] = "lake"
+        outputDF.loc[outputDF["feature"] == "Courtyard",  "feature"] = "ctyard"
+        outputDF.loc[outputDF["feature"] == "Grill",  "feature"] = "grill"
+        outputDF.loc[outputDF["feature"] == "Patio",  "feature"] = "patio"        
+        outputDF.loc[outputDF["feature"] == "Picnic Area",  "feature"] = "picnicarea"
+        outputDF.loc[outputDF["feature"] == "Rooftop Lounge",  "feature"] = "rooflounge"
+        outputDF.loc[outputDF["feature"] == "Waterfront",  "feature"] = "waterfront"
+        outputDF.loc[outputDF["feature"] == "Zen Garden",  "feature"] = "zengarden"
+        outputDF.loc[outputDF["feature"] == "Fenced Lot",  "feature"] = "fencedlot"
+        outputDF.loc[outputDF["feature"] == "Yard",  "feature"] = "yard"
+        outputDF.loc[outputDF["feature"] == "Lawn",  "feature"] = "lawn"
+        outputDF.loc[outputDF["feature"] == "Garden",  "feature"] = "garden"
+        outputDF.loc[outputDF["feature"] == "Porch",  "feature"] = "porch"
+        outputDF.loc[outputDF["feature"] == "Deck",  "feature"] = "deck"
+        outputDF.loc[outputDF["feature"] == "Barbecue Area",  "feature"] = "bbqarea"
+        outputDF.loc[outputDF["feature"] == "Barbecue/Grill",  "feature"] = "bbq"
+        outputDF.loc[outputDF["feature"] == "Pond",  "feature"] = "pond"
     
-    #outputDF = outputDF.pivot(index = "pid", columns = "feature", values = "value").fillna(value = 0)
-    #outputDF.insert(loc = 0, column = "pid", value = range(0, len(df)))
+    outputDF = outputDF.pivot(index = "pid", columns = "feature", values = "value").fillna(value = 0)
+    outputDF.insert(loc = 0, column = "pid", value = range(0, len(df)))
 
     
     # Return data frame
@@ -710,16 +866,27 @@ def GetFees(df, column):
     outputDF["maxcost"] = MaxCost[0]
     
     if column == "One Time Fees":
-        outputDF.loc[outputDF["desc"] == "Cat Deposit",  "desc"] = "dog"
-        outputDF.loc[outputDF["desc"] == "Dog Deposit",  "desc"] = "cat"
+        outputDF.loc[outputDF["desc"] == "Cat Deposit",  "desc"] = "dogdep"
+        outputDF.loc[outputDF["desc"] == "Dog Deposit",  "desc"] = "catdep"
         outputDF.loc[outputDF["desc"] == "Other",  "desc"] = "unknown"
-        outputDF.loc[outputDF["desc"] == "Other Deposit",  "desc"] = "other"
-        outputDF.loc[outputDF["desc"] == "Bird Deposit",  "desc"] = "bird"
-        outputDF.loc[outputDF["desc"] == "Fish Deposit",  "desc"] = "fish"
-        outputDF.loc[outputDF["desc"] == "Reptile Deposit",  "desc"] = "reptile"
+        outputDF.loc[outputDF["desc"] == "Other Deposit",  "desc"] = "otherdep"
+        outputDF.loc[outputDF["desc"] == "Bird Deposit",  "desc"] = "birddep"
+        outputDF.loc[outputDF["desc"] == "Fish Deposit",  "desc"] = "fishdep"
+        outputDF.loc[outputDF["desc"] == "Reptile Deposit",  "desc"] = "reptiledep"
+        outputDF.loc[outputDF["desc"] == "Admin Fee",  "desc"] = "admin"
+        outputDF.loc[outputDF["desc"] == "Amenity Fee",  "desc"] = "amenity"
+        outputDF.loc[outputDF["desc"] == "Application Fee",  "desc"] = "appfee"
+        outputDF.loc[outputDF["desc"] == "Bird Fee",  "desc"] = "birdfee"
+        outputDF.loc[outputDF["desc"] == "Cat Fee",  "desc"] = "catfee"
+        outputDF.loc[outputDF["desc"] == "Dog Fee",  "desc"] = "dogfee"
+        outputDF.loc[outputDF["desc"] == "Fish Fee",  "desc"] = "fishfee"
+        outputDF.loc[outputDF["desc"] == "Move-In Fee",  "desc"] = "movein"
+        outputDF.loc[outputDF["desc"] == "NA",  "desc"] = "na"
+        outputDF.loc[outputDF["desc"] == "Reptile Fee",  "desc"] = "reptilefee"
     else:
         outputDF.loc[outputDF["desc"] == "Unassigned Surface Lot Parking",  "desc"] = "unlotpark"
         outputDF.loc[outputDF["desc"] == "Assigned Covered Parking",  "desc"] = "ascovpark"
+        outputDF.loc[outputDF["desc"] == "Assigned Street Parking",  "desc"] = "asstpark"
         outputDF.loc[outputDF["desc"] == "Trash Removal",  "desc"] = "trashrem"
         outputDF.loc[outputDF["desc"] == "Sewer",  "desc"] = "sewer"
         outputDF.loc[outputDF["desc"] == "Assigned Surface Lot Parking",  "desc"] = "aslotpark"
@@ -738,7 +905,7 @@ def GetFees(df, column):
         outputDF.loc[outputDF["desc"] == "Fish Rent",  "desc"] = "fish"
         outputDF.loc[outputDF["desc"] == "Reptile Rent",  "desc"] = "reptile"
         outputDF.loc[outputDF["desc"] == "Other Rent",  "desc"] = "otherfee"
-        outputDF.loc[outputDF["desc"] == "Unassigned Street Parking",  "desc"] = "stpark"
+        outputDF.loc[outputDF["desc"] == "Unassigned Street Parking",  "desc"] = "unstpark"
         outputDF.loc[outputDF["desc"] == "Dog Rent",  "desc"] = "cat"
         outputDF.loc[outputDF["desc"] == "Cat Rent",  "desc"] = "dog"
         outputDF.loc[outputDF["desc"] == "Storage Fee",  "desc"] = "storage"
@@ -755,76 +922,347 @@ def GetFees(df, column):
         
     # Return data frames
     return(output_mincostDF, output_maxcostDF)
+    
+def GetLookupTables(boolean):
+    
+    if boolean == True:
+        # Features
+        featureslu = {"NA":"na",
+                  "Washer/Dryer":"washdry",
+                  "Air Conditioning":"ac",
+                  "Ceiling Fans":"ceilfans",
+                  "Cable Ready":"cableready",
+                  "Fireplace":"fireplace",
+                  "Alarm":"alarm",
+                  "Storage Units":"storage",
+                  "High Speed Internet Access":"hsinternet",
+                  "Wi-Fi":"wifi",
+                  "Heating":"heating",
+                  "Tub/Shower":"tubshower",
+                  "Sprinkler System":"sprinklers",
+                  "Smoke Free":"smokefree",
+                  "Satellite TV":"sattv",
+                  "Wheelchair Accessible (Rooms)":"wheelchacc",
+                  "Handrails":"handrail",
+                  "Framed Mirrors":"framedmirror",
+                  "Trash Compactor":"trashcompact",
+                  "Washer/Dryer Hookup":"washdryhookup",
+                  "Intercom":"intercom",
+                  "Double Vanities":"doublevanities",
+                  "Vacuum System":"vacuumsys",
+                  "Surround Sound":"ssound"}
+        featureslu = pd.DataFrame.from_dict(featureslu, orient = "index")
+        featureslu.insert(loc = 0, column = "desc", value = featureslu.index)
+        featureslu.rename(columns = {0:"column"}, inplace = True)
+        featureslu.reset_index(inplace = True, drop = True)
+        # Gym
+        gymlu = {"Fitness Center":"fitcenter",
+                 "NA":"na",
+                 "Sauna":"sauna",
+                 "Spa":"spa",
+                 "Pool":"pool",
+                 "Playground":"playground",
+                 "Basketball Court":"bballct",
+                 "Racquetball Court":"rballct",
+                 "Tennis Court":"tennisct",        
+                 "Cardio Machines":"cardiomach",
+                 "Free Weights":"freewghts",
+                 "Weight Machines":"wghtmach",
+                 "Bike Storage":"bikestore",
+                 "Gameroom":"gameroom",
+                 "Fitness Programs":"fitprog",
+                 "Volleyball Court":"vballct",
+                 "Gaming Stations":"gamestation",
+                 "Media Center/Movie Theatre":"mediacenter",
+                 "Walking/Biking Trails":"trails",
+                 "Health Club Facility":"healthclub",
+                 "Putting Greens":"putgreen",
+                 "Sport Court":"sportct"}
+        gymlu = pd.DataFrame.from_dict(gymlu, orient = "index")
+        gymlu.insert(loc = 0, column = "desc", value = gymlu.index)
+        gymlu.rename(columns = {0:"column"}, inplace = True)
+        gymlu.reset_index(inplace = True, drop = True)
+        #Kitchen
+        kitchenlu = {"NA":"na",
+                     "Dishwasher":"dwasher",
+                     "Disposal":"disposal",
+                     "Granite Countertops":"granctops",
+                     "Stainless Steel Appliances":"ssteelapp",
+                     "Kitchen":"kitchen",
+                     "Microwave":"microwave",
+                     "Refrigerator":"fridge",        
+                     "Ice Maker":"icemaker",
+                     "Range":"range",
+                     "Island Kitchen":"islandkitch",
+                     "Pantry":"pantry",
+                     "Oven":"oven",
+                     "Freezer":"freezer",
+                     "Warming Drawer":"warmdrawer",
+                     "Eat-in Kitchen":"eatinkitch",
+                     "Instant Hot Water":"insthotwater",
+                     "Coffee System":"coffeesys",
+                     "Breakfast Nook":"breaknook"}
+        kitchenlu = pd.DataFrame.from_dict(kitchenlu, orient = "index")
+        kitchenlu.insert(loc = 0, column = "desc", value = kitchenlu.index)
+        kitchenlu.rename(columns = {0:"column"}, inplace = True)
+        kitchenlu.reset_index(inplace = True, drop = True)
+        #Living Space
+        livingspacelu = {"Walk-In Closets":"walkincloset",
+                         "NA":"na",
+                         "Hardwood Floors":"hwoodfloor",
+                         "Carpet":"carpet",
+                         "Bay Window":"baywindow",
+                         "Views":"views",
+                         "Window Coverings":"windowcov",
+                         "Tile Floors":"tilefloor",        
+                         "Linen Closet":"linencloset",
+                         "Vaulted Ceiling":"vceil",
+                         "Vinyl Flooring":"vfloor",
+                         "Dining Room":"diningrm",
+                         "Den":"den",
+                         "Sunroom":"sunrm",
+                         "Loft Layout":"loft",
+                         "Accent Walls":"accentwalls",
+                         "Skylight":"skylight",
+                         "Furnished":"furnished",
+                         "Office":"office",
+                         "Crown Molding":"crownmold",
+                         "Double Pane Windows":"doublepw",
+                         "Basement":"basement",
+                         "Built-In Bookshelves":"bshelves",
+                         "Attic":"attic",
+                         "Wet Bar":"wetbar",
+                         "Family Room":"famrm",
+                         "Recreation Room":"recrm",
+                         "Mother-in-law Unit":"mothlawunit",
+                         "Mud Room":"mudrm"}
+        livingspacelu = pd.DataFrame.from_dict(livingspacelu, orient = "index")
+        livingspacelu.insert(loc = 0, column = "desc", value = livingspacelu.index)
+        livingspacelu.rename(columns = {0:"column"}, inplace = True)
+        livingspacelu.reset_index(inplace = True, drop = True)
+        #Services
+        serviceslu = {"NA":"na",
+                      "Package Service":"packserv",
+                      "Maintenance on site":"onsitemaint",
+                      "Concierge":"concierge",
+                      "24 Hour Availability":"avail24hr",
+                      "Recycling":"recycling",
+                      "Renters Insurance Program":"rentins",
+                      "Dry Cleaning Service":"dryclean",        
+                      "Online Services":"onlineserv",
+                      "Pet Play Area":"petplay",
+                      "Pet Care":"petcare",
+                      "Controlled Access":"accesscontr",
+                      "On-Site ATM":"atm",
+                      "Laundry Facilities":"laundry",
+                      "Community-Wide WiFi":"commwifi",
+                      "Bilingual":"bilingual",
+                      "Courtesy Patrol":"patrol",
+                      "Guest Apartment":"guestapt",
+                      "Car Wash Area":"carwash",
+                      "Energy Star Certified":"energystar",
+                      "Pet Washing Station":"petwash",
+                      "Car Charging Station":"carcharge",
+                      "Property Manager on Site":"onsitepropman",
+                      "Furnished Units Available":"furnishavail",
+                      "Wi-Fi at Pool and Clubhouse":"clubpoolwifi",
+                      "Trash Pickup - Door to Door":"ddtrash",
+                      "Planned Social Activities":"social",
+                      "Laundry Service":"laundryservice",
+                      "Shuttle to Train":"shuttle",
+                      "Health Club Discount":"hclubdisc",
+                      "LEED Rating":"leedrt",
+                      "On-Site Retail":"onsiteretail",
+                      "Grocery Service":"groceryserv",
+                      "Maid Service":"maidserv",
+                      "Meal Service":"mealserv",
+                      "Day Care":"daycare",
+                      "Security System":"securitysys",
+                      "House Sitter Services":"housesitserv",
+                      "Video Patrol":"videopatrol",
+                      "Local Vet / Pet Store Discount":"petstoredisc",
+                      "Parking Security":"parksec",
+                      "Doorman":"doorman",
+                      "Trash Pickup - Curbside":"cstrash",
+                      "Composting":"compost",
+                      "Hearing Impaired Accessible":"hearimpacc",
+                      "Vision Impaired Accessible":"visimpacc",
+                      "Per Diem Accepted":"perdiem"}
+        serviceslu = pd.DataFrame.from_dict(serviceslu, orient = "index")
+        serviceslu.insert(loc = 0, column = "desc", value = serviceslu.index)
+        serviceslu.rename(columns = {0:"column"}, inplace = True)
+        serviceslu.reset_index(inplace = True, drop = True)
+        #Indoor Info
+        indoorinfolu = {"Business Center":"businesscent",
+                        "Storage Space":"storagespace",
+                        "NA":"na",
+                        "Clubhouse":"clubhouse",
+                        "Elevator":"elevator",
+                        "Lounge":"lounge",
+                        "Conference Room":"confrm",
+                        "Coffee Bar":"coffeebar",     
+                        "Multi Use Room":"multiuserm",
+                        "Disposal Chutes":"dispchutes",
+                        "Library":"library",
+                        "Corporate Suites":"corpsuite",
+                        "Breakfast/Coffee Concierge":"bcconcierge",
+                        "Two Story Lobby":"twostorylobby",
+                        "Vintage Building":"vintage",
+                        "Tanning Salon":"tanningsal"}
+        indoorinfolu = pd.DataFrame.from_dict(indoorinfolu, orient = "index")
+        indoorinfolu.insert(loc = 0, column = "desc", value = indoorinfolu.index)
+        indoorinfolu.rename(columns = {0:"column"}, inplace = True)
+        indoorinfolu.reset_index(inplace = True, drop = True)
+        # Outdoor Info
+        outdoorinfolu = {"Gated":"gated",
+                         "NA":"na",
+                         "Boat Dock":"boatdock",
+                         "Cabana":"cabana",
+                         "Sundeck":"sundeck",
+                         "Balcony":"balcony",
+                         "Lake Access":"lake",
+                         "Courtyard":"ctyard",
+                         "Grill":"grill",
+                         "Patio":"patio",       
+                         "Picnic Area":"picnicarea",
+                         "Rooftop Lounge":"rooflounge",
+                         "Waterfront":"waterfront",
+                         "Zen Garden":"zengarden",
+                         "Fenced Lot":"fencedlot",
+                         "Yard":"yard",
+                         "Lawn":"lawn",
+                         "Garden":"garden",
+                         "Porch":"porch",
+                         "Deck":"deck",
+                         "Barbecue Area":"bbqarea",
+                         "Barbecue/Grill":"bbq",
+                         "Pond":"pond"}
+        outdoorinfolu = pd.DataFrame.from_dict(outdoorinfolu, orient = "index")
+        outdoorinfolu.insert(loc = 0, column = "desc", value = outdoorinfolu.index)
+        outdoorinfolu.rename(columns = {0:"column"}, inplace = True)
+        outdoorinfolu.reset_index(inplace = True, drop = True)
+    
+    return(featureslu, gymlu, kitchenlu, livingspacelu, serviceslu, indoorinfolu, outdoorinfolu)
         
 # ----------------------------------------- END FUNCTIONS -----------------------------------------#
 # ----------------------------------------- BEGIN SCRIPT -----------------------------------------#
 
 # Import required packages
 import pandas as pd
-import requests
-from bs4 import BeautifulSoup
-import re
-import numpy as np
 import os
 
-### -------------------------- Use the below code to get all data in its original form in a single data frame
-##DataList = requests.get("https://worm.nyc3.digitaloceanspaces.com/") # Request html from data store
-##soup = BeautifulSoup(DataList.text, "lxml") # Parse html
-##DataList = soup.find_all("key") # Find the name of each csv file and store
-##
-### Initialize empty list to store url to files
-#Data = []
-##
-###Loop through csv files in list of data and append rest of url
-##for files in DataList:
-##    Data.append("https://worm.nyc3.digitaloceanspaces.com/"+files.text)
-#        
+## -------------------------- Use the below code to get all data in its original form in a single data frame
+#DataList = requests.get("https://worm.nyc3.digitaloceanspaces.com/") # Request html from data store
+#soup = BeautifulSoup(DataList.text, "lxml") # Parse html
+#DataList = soup.find_all("key") # Find the name of each csv file and store
 #
-## Locally
-#folderpath = "C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Capstone Project Original Data Copy\\"
+## Initialize empty list to store url to files
+Data = []
 #
-#for files in os.listdir(folderpath):
-#    Data.append(folderpath+files)
-#
-## Initialize empty data frame to store all original data in a single data frame
-#df = pd.DataFrame()
-#
-## Loop through all csv files and append 
-#for files in Data:
-#    tempDF = pd.read_csv(files, encoding = "latin-1")
-#    df = df.append(tempDF, ignore_index = True) 
-## -------------------------- Use the above code to get all data in its original form in a single data frame
-#
-## -------------------------- Use the below code to clean the data from its original form 
-#Names = GetNames(df) # Gets the names of the properties
-#Links = GetLinks(df) # Gets the link to property-level information 
-#PropertyAddress = SplitAddresses(GetAddresses(df)) # Splits the address into street, city, state, zip
-#Contact = SplitPhone(df)
-##df = DropCols(df) # Drops columns no longer necessary
-#PetsAllowed = GetPetPolicy(df)
-#Parking = GetParkingPolicy(df)
-#Features = GetFeatures(df, "Features")
-#Gym = GetFeatures(df, "Gym")
-#Kitchen = GetFeatures(df, "Kitchen")
+##Loop through csv files in list of data and append rest of url
+#for files in DataList:
+#    Data.append("https://worm.nyc3.digitaloceanspaces.com/"+files.text)
+        
+
+# Locally
+Property = pd.DataFrame()
+folder = 'C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\DMV\\data\\property data\\'
+
+
+for file in os.listdir(folder):
+    df = pd.read_csv(folder+file, encoding = "latin-1")   
+    Property = Property.append(df, ignore_index = True)
+    
+# -------------------------- Use the above code to get all data in its original form in a single data frame
+
+# -------------------------- Use the below code to clean the data from its original form 
+Address = SplitAddresses(GetAddresses(Property)) # Get addresses
+Address.drop_duplicates(subset = ["address", "city", "state", "zip"], keep = "first", inplace = True) # Get and remove duplicates
+Address.index = range(0,len(Address)) # Rewrite index
+Address.pid = range(0,len(Address)) # Rewrite pid
+Property = Property.loc[Address.index] # Remove duplicates from Property
+Property.index = range(0, len(Property)) # Rewrite index
+Names = GetNames(Property) # Gets the names of the properties
+Links = GetLinks(Property) # Get links to apartments.com page for property
+Links["url"][3218] = "https://www.apartments.com/waverly-gardens-62-or-better-woodstock-md/3xvedvg/" # Manually set these links
+Links["url"][6465] = "https://www.apartments.com/the-upton-res-rockville-md/2jsvz4c/" # Manually set these links
+Contact = SplitPhone(Property)
+#df = DropCols(df) # Drops columns no longer necessary
+PetsAllowed = GetPetPolicy(Property)
+Parking = GetParkingPolicy(Property)
+Features = GetFeatures(Property, "Features")
+Gym = GetFeatures(Property, "Gym")
+Kitchen = GetFeatures(Property, "Kitchen")
 #Amenities = GetFeatures(df, "Amenities")
-#LivingSpace = GetFeatures(df, "Living Space")
-#Services = GetFeatures(df, "Services")
+LivingSpace = GetFeatures(Property, "Living Space")
+Services = GetFeatures(Property, "Services")
 #PropertyInfo = GetFeatures(df, "Property Info")
-#IndoorInfo = GetFeatures(df, "Indoor Info")
-#OutdoorInfo = GetFeatures(df, "Outdoor Info")
-#MonthlyFees = GetFees(df, "Monthly Fees")
-#OneTimeFees = GetFees(df, "One Time Fees")
+IndoorInfo = GetFeatures(Property, "Indoor Info")
+OutdoorInfo = GetFeatures(Property, "Outdoor Info")
+MonthlyFeesMin, MonthlyFeesMax = GetFees(Property, "Monthly Fees")
+OneTimeFeesMin, OneTimeFeesMax = GetFees(Property, "One Time Fees")
+FeaturesLU, GymLU, KitchenLU, LivingSpaceLU, ServicesLU, IndoorInfoLU, OutdoorInfoLU = GetLookupTables(True)
+
+# Write outputs of script to CSV
+    
+Names.to_csv("Name.csv", index = False)
+Links.to_csv("Link.csv", index = False)
+Address.to_csv("Address.csv", index = False)
+Contact.to_csv("Contact.csv", index = False)
+PetsAllowed.to_csv("Pets.csv", index = False)
+Parking.to_csv("Parking.csv", index = False)
+Features.to_csv("Features.csv", index = False)
+Gym.to_csv("Gym.csv", index = False)
+Kitchen.to_csv("Kitchen.csv", index = False)
+LivingSpace.to_csv("LivingSpace.csv", index = False)
+Services.to_csv("Services.csv", index = False)
+IndoorInfo.to_csv("IndoorInfo.csv", index = False)
+OutdoorInfo.to_csv("OutdoorInfo.csv", index = False)
+MonthlyFeesMin.to_csv("MonthlyFeesMin.csv", index = False)
+MonthlyFeesMax.to_csv("MonthlyFeesMax.csv", index = False)
+OneTimeFeesMin.to_csv("OneTimeFeesMin.csv", index = False)
+OneTimeFeesMax.to_csv("OneTimeFeesMax.csv", index = False)
+
+# Write lookup tables to csv
+
+FeaturesLU.sort_values(["desc"], inplace = True)
+FeaturesLU.index = range(0, len(FeaturesLU))
+GymLU.sort_values(["desc"], inplace = True)
+GymLU.index = range(0, len(GymLU))
+KitchenLU.sort_values(["desc"], inplace = True)
+KitchenLU.index = range(0, len(KitchenLU))
+LivingSpaceLU.sort_values(["desc"], inplace = True)
+LivingSpaceLU.index = range(0, len(LivingSpaceLU))
+ServicesLU.sort_values(["desc"], inplace = True)
+ServicesLU.index = range(0, len(ServicesLU))
+IndoorInfoLU.sort_values(["desc"], inplace = True)
+IndoorInfoLU.index = range(0, len(IndoorInfoLU))
+OutdoorInfoLU.sort_values(["desc"], inplace = True)
+OutdoorInfoLU.index = range(0, len(OutdoorInfoLU))
+
+
+FeaturesLU.to_csv("FeaturesLU.csv", index = False)
+GymLU.to_csv("GymLU.csv", index = False)
+KitchenLU.to_csv("KitchenLU.csv", index = False)
+LivingSpaceLU.to_csv("LivingSpaceLU.csv", index = False)
+ServicesLU.to_csv("ServicesLU.csv", index = False)
+IndoorInfoLU.to_csv("IndoorInfoLU.csv", index = False)
+OutdoorInfoLU.to_csv("OutdoorInfoLU.csv", index = False)
+
 # -------------------------- Use the above code to clean the data from its original form 
 # ----------------------------------------- END SCRIPT -----------------------------------------#
 
 """ ----------------------------------------- BEGIN THINGS TO DO -----------------------------------------
 
-1. Rename features in GetFees.py so that they are shorter
+1. **Condense features in Amenities column and PropertyInfo column**
 2. Add function to extract number of images
 3. Change encoding of description column
 4. Should we try to parse the Lease column or just ignore it?
 5. Add feature to extract whether parking is assigned/unassigned
-6. Add function to remove instances that are in Fredericksburg, VA and Frederick MD. 
+6. **Add function for lookup tables for Amenities and PropertyInfo columns**
+7. Extract apartment type (apartment, townhome, etc...)
+    See reviewUtils in html code
+8. Scrape apartment ratings?
 
 # ----------------------------------------- END THINGS TO DO -----------------------------------------"""
 

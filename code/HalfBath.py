@@ -10,11 +10,10 @@ def HalfBath(x):
     import re
     numRegex = re.compile(r'\d')
     
-    if x == "Unknown":
-        return("Unknown")
-    elif x == numRegex.search(x).group():
-        return(x)
-    else:
-        return(x[0]+".5")
+    if isinstance(x,str) == True:
+        if len(x) > 1:
+            return(float(numRegex.search(x).group()+".5"))
+        else:
+            return(float(x))
     
     #AllUnits.baths = AllUnits.baths.apply(lambda x: x if x == numRegex.search(x).group() else x[0]+".5")

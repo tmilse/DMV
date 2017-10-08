@@ -7,6 +7,21 @@ Created on Wed Sep 27 12:51:03 2017
 
 # ----------------------------------------- BEGIN FUNCTIONS -----------------------------------------#
 
+def HalfBath(x):
+    
+    import re
+    numRegex = re.compile(r'\d')
+    
+    if isinstance(x,str) == True:
+        if len(x) > 1:
+            output = numRegex.search(x).group()+".5"
+        else:
+            output = x
+    else:
+        output = x
+        
+    return(output)
+
 def GetAvailableApts(path, i):
     
     # Import required packages
@@ -81,18 +96,18 @@ def GetAvailableApts(path, i):
                     MaxSqFt.append(int(temp))
         
         
-        PropertyID = [i]*len(Beds) # Keep track of the property
+        PropertyID = [int(i)]*len(Beds) # Keep track of the property
     
     if check == 6: # If there are no apartments available at this property then we assign everything as NAN
         if  ("Apartments for Rent in" in soup.find_all("title")[0].text) or (soup.find_all("span", attrs = {"class" : "noAvailability"}) != []):
-            PropertyID = i
+            PropertyID = int(i)
             Beds = math.nan
             Baths = math.nan
             MinRent = math.nan
             MaxRent = math.nan
             MinSqFt = math.nan
             MaxSqFt = math.nan
-            Property = pd.DataFrame({"PropertyID" : PropertyID, "Beds" : Beds, "Baths" : Baths, "MinRent" : MinRent, "MaxRent" : MaxRent, "MinSqFt" : MinSqFt, "MaxSqFt" : MaxSqFt}, index = range(0,1))
+            Property = pd.DataFrame({"pid" : PropertyID, "beds" : Beds, "baths" : Baths, "minrent" : MinRent, "maxrent" : MaxRent, "minsqft" : MinSqFt, "maxsqft" : MaxSqFt}, index = range(0,1))
         else: # Else look for just studios
             table = soup.find_all("td", attrs = {"class" : "beds"})
             if "Studio" in table[0].find_all("span", attrs = {"class" : "longText"})[0].text:
@@ -126,21 +141,21 @@ def GetAvailableApts(path, i):
             else:
                 MinSqFt.append(int(temp))
                 MaxSqFt.append(int(temp))
-            PropertyID = [i]
-            Property = pd.DataFrame({"PropertyID" : PropertyID, "Beds" : Beds, "Baths" : Baths, "MinRent" : MinRent, "MaxRent" : MaxRent, "MinSqFt" : MinSqFt, "MaxSqFt" : MaxSqFt})
+            PropertyID = [int(i)]
+            Property = pd.DataFrame({"pid" : PropertyID, "beds" : Beds, "baths" : Baths, "minrent" : MinRent, "maxrent" : MaxRent, "minsqft" : MinSqFt, "maxsqft" : MaxSqFt})
     
     else: # If we found more than one apartment
         if len(Beds) > 1:
-            Property = pd.DataFrame({"PropertyID" : PropertyID, "Beds" : Beds, "Baths" : Baths, "MinRent" : MinRent, "MaxRent" : MaxRent, "MinSqFt" : MinSqFt, "MaxSqFt" : MaxSqFt})
+            Property = pd.DataFrame({"pid" : PropertyID, "beds" : Beds, "baths" : Baths, "minrent" : MinRent, "maxrent" : MaxRent, "minsqft" : MinSqFt, "maxsqft" : MaxSqFt})
         else: # If no apartments are available
-            PropertyID = i
+            PropertyID = int(i)
             Beds = math.nan
             Baths = math.nan
             MinRent = math.nan
             MaxRent = math.nan
             MinSqFt = math.nan
             MaxSqFt = math.nan
-            Property = pd.DataFrame({"pid" : PropertyID, "bed" : Beds, "bath" : Baths, "minrent" : MinRent, "maxrent" : MaxRent, "minsqft" : MinSqFt, "maxsqft" : MaxSqFt}, index = range(0,1))
+            Property = pd.DataFrame({"pid" : PropertyID, "beds" : Beds, "baths" : Baths, "minrent" : MinRent, "maxrent" : MaxRent, "minsqft" : MinSqFt, "maxsqft" : MaxSqFt}, index = range(0,1))
         
     # Now we try to extract local metro station information
     MetroStation = []
@@ -164,14 +179,18 @@ def GetAvailableApts(path, i):
     
     # Use in case there are no nearby metro stations
     if len(MetroStation) == 0:
-        PropertyID = [i]
+        PropertyID = [int(i)]
         MetroStation = ["None"]
         Distance = [math.nan]
         Time = [math.nan]
         Transportation = pd.DataFrame({"pid" : PropertyID, "station" : MetroStation,"distance" : Distance, "time" : Time})
     else: # Else there are nearby metro stations so we store those   
-        PropertyID = [i]*len(MetroStation)
+        PropertyID = [int(i)]*len(MetroStation)
         Transportation = pd.DataFrame({"pid" : PropertyID, "station" : MetroStation,"distance" : Distance, "time" : Time})
+        
+        
+    Property = Property[["pid", "beds", "baths", "minrent", "maxrent", "minsqft", "maxsqft"]]
+    Transportation = Transportation[["pid", "station", "distance", "time"]]
     
     # Return property date and local metro transportation data
     return(Property, Transportation)
@@ -198,12 +217,43 @@ def GetParentCompany(path, i):
     
     # Initialize empty data frame and store property ID and parent company name
     outputDF = pd.DataFrame()
-    outputDF["pid"] = [i]
+    outputDF["pid"] = [int(i)]
     outputDF["parent"] = [parent]
     
     # Return data frame
     return(outputDF)
 
+def GetType(path, i):
+    
+    # Import required packages
+    from bs4 import BeautifulSoup
+    import pandas as pd
+    
+    # Open file in path, read file, and parse file
+    file = open(path, "r")   
+    #test = open("C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Unit Data\\PropertyID0.html", "r")
+    file = file.read()
+    soup = BeautifulSoup(file, "lxml")
+    
+    # Look for name of parent company
+    typeapt = soup.find_all("h2", attrs = {"class":"subHeading"})
+    
+    if typeapt is None: # If no parent company is found
+        typeapt = "Unknown"
+    elif typeapt == []:
+        typeapt = "Unknown"
+    elif typeapt[0].text.strip().split(" ")[0] == "Reviews":
+        typeapt = "Unknown"
+    else: # If parent company is found, get name of parent company
+        typeapt = typeapt[0].text.strip().split(" ")[0]
+    
+    # Initialize empty data frame and store property ID and parent company name
+    outputDF = pd.DataFrame()
+    outputDF["pid"] = [int(i)]
+    outputDF["type"] = [typeapt]
+    
+    # Return data frame
+    return(outputDF)
 # ----------------------------------------- END FUNCTIONS -----------------------------------------#
 # ----------------------------------------- BEGIN SCRIPT -----------------------------------------#
     
@@ -211,10 +261,11 @@ def GetParentCompany(path, i):
 import os
 import re
 import pandas as pd
+import math
 
 
 # List files in directory
-files = os.listdir("C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Unit Data")
+folder = "C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\DMV\\data\\unit data dedup\\"
 #AllCities = pd.read_csv("C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Partly Cleaned September 24\\AllCities.csv", encoding = "latin-1")
 #files = ["PropertyID954.html", "PropertyID1014.html", "PropertyID2323.html"]
 
@@ -225,21 +276,29 @@ Transportation = []
 # Create regular expression to search for a single digit number to a 4-digit number
 numRegex = re.compile(r"\d{1,4}")
 
+count = 0
 
 # For each file in directory
-for file in files:
+for file in os.listdir(folder):
     ID = numRegex.search(file).group() # Get property ID
     # Parse unit-level data and output unit-level data for that property and local metro station data
-    P,T = Parse("C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Unit Data\\"+file, ID)
+    P, T = GetAvailableApts(folder+file, ID)
     Property.append(P) # Append unit-level data to list
     Transportation.append(T) # Append local metro station data to list
+    if count%100 == 0:
+        print(count)
+    count+=1
     
 # Append unit-level datand local metro station data to single data frame
 PropertyDF = pd.DataFrame()
-TransportationDF = pd.DataFrame
+TransportationDF = pd.DataFrame()
 
 for df in Property:
     PropertyDF = PropertyDF.append(df, ignore_index = True)
+
+PropertyDF.loc[PropertyDF['baths'] == '', 'baths'] = math.nan
+PropertyDF.baths = PropertyDF.baths.apply(lambda x: HalfBath(x))
+PropertyDF.baths = PropertyDF.baths.apply(lambda x: float(x))
     
 for df in Transportation:
     TransportationDF = TransportationDF.append(df, ignore_index = True)
@@ -249,16 +308,10 @@ Parent = []
 
 i = 0
 # For each file in the directory
-for file in files:
+for file in os.listdir(folder):
     ID = numRegex.search(file).group() # Get property ID
-    if ID == "954": # File with property ID = 954 treat separately because we're having trouble parsing it
-        df = pd.DataFrame()
-        df["pid"] = 954
-        df["parent"] = "Unknown"
-        Parent.append(df)
-        continue # Goes back to beginning of for loop
-    # Otherwise parse the data to find the parent company
-    df = GetParentCompany("C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Unit Data\\"+file, ID)    
+    # Parse the data to find the parent company
+    df = GetParentCompany(folder+file, ID)    
     Parent.append(df) # Append to list
     
     # Use to keep track of progress
@@ -269,14 +322,58 @@ for file in files:
 ParentDF = pd.DataFrame()
 
 for df in Parent:
-    ParentDF = ParentDF.append(Property, ignore_index = True)
+    ParentDF = ParentDF.append(df, ignore_index = True)
+    
+Type = []
+
+i = 0
+# For each file in the directory
+for j in range(0,7244):
+    ID = j#ID = numRegex.search(file).group() # Get property ID
+    # Parse the data to find the type
+    df = GetType(folder+"PropertyID"+str(j)+".html", ID)    
+    Type.append(df) # Append to list
+    
+    # Use to keep track of progress
+    if i%100 == 0:
+        print(i)
+    i+=1
+
+TypeDF = pd.DataFrame()
+
+for df in Type:
+    TypeDF = TypeDF.append(df, ignore_index = True)
+    
+
+ParentLU = pd.DataFrame(ParentDF.parent.unique(), columns = ["parent"])
+ParentLU["parentid"] = range(0, len(ParentLU))
+ParentLU = ParentLU[["parentid", "parent"]]
+
+ParentDF = ParentDF.merge(ParentLU, how = "inner", on = "parent")
+ParentDF = ParentDF[["pid", "parentid"]]
+ParentDF.sort_values("pid", inplace = True)
+ParentDF.index = range(0, len(ParentDF))
+
+TransportationDF.sort_values(["pid", "distance"], inplace = True)
+TransportationDF.index = range(0, len(TransportationDF))
+
+PropertyDF.sort_values(["pid", "beds", "baths"], inplace = True)
+PropertyDF.index = range(0, len(PropertyDF))
+
+
+# Write outputs of script to CSV
+    
+PropertyDF.to_csv("Units.csv", index = False)
+TransportationDF.to_csv("UnitTransport.csv", index = False)
+ParentDF.to_csv("Parent.csv", index = False)
+ParentLU.to_csv("ParentLU.csv", index = False)
+TypeDF.to_csv("Type.csv", index = False)
+
 
 # ----------------------------------------- END SCRIPT -----------------------------------------#
 """ ----------------------------------------- BEGIN THINGS TO DO -----------------------------------------
 
-1. Add Half Bath function
-2. Add function to get parent ID lookup table
-
+1. Add function to get type of apartment (apartment, home, townhome, condo, etc...)
 # ----------------------------------------- END THINGS TO DO -----------------------------------------"""
 
 
