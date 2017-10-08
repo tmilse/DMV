@@ -1,0 +1,48 @@
+desc,column
+24 Hour Availability,avail24hr
+Bilingual,bilingual
+Car Charging Station,carcharge
+Car Wash Area,carwash
+Community-Wide WiFi,commwifi
+Composting,compost
+Concierge,concierge
+Controlled Access,accesscontr
+Courtesy Patrol,patrol
+Day Care,daycare
+Doorman,doorman
+Dry Cleaning Service,dryclean
+Energy Star Certified,energystar
+Furnished Units Available,furnishavail
+Grocery Service,groceryserv
+Guest Apartment,guestapt
+Health Club Discount,hclubdisc
+Hearing Impaired Accessible,hearimpacc
+House Sitter Services,housesitserv
+LEED Rating,leedrt
+Laundry Facilities,laundry
+Laundry Service,laundryservice
+Local Vet / Pet Store Discount,petstoredisc
+Maid Service,maidserv
+Maintenance on site,onsitemaint
+Meal Service,mealserv
+NA,na
+On-Site ATM,atm
+On-Site Retail,onsiteretail
+Online Services,onlineserv
+Package Service,packserv
+Parking Security,parksec
+Per Diem Accepted,perdiem
+Pet Care,petcare
+Pet Play Area,petplay
+Pet Washing Station,petwash
+Planned Social Activities,social
+Property Manager on Site,onsitepropman
+Recycling,recycling
+Renters Insurance Program,rentins
+Security System,securitysys
+Shuttle to Train,shuttle
+Trash Pickup - Curbside,cstrash
+Trash Pickup - Door to Door,ddtrash
+Video Patrol,videopatrol
+Vision Impaired Accessible,visimpacc
+Wi-Fi at Pool and Clubhouse,clubpoolwifi
