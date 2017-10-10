@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Sep 27 12:51:03 2017
+Description: This file contains functions that will take the original unit-level data and clean it as needed. A separate 
+             script is used to run the functions to clean the data. 
 
-@author: NKallfa
 """
 
 # ----------------------------------------- BEGIN FUNCTIONS -----------------------------------------#
@@ -254,129 +254,55 @@ def GetType(path, i):
     
     # Return data frame
     return(outputDF)
+    
+def GetMetroStation(path, i):
+
+    # Import required packages
+    from bs4 import BeautifulSoup
+    import re
+    import pandas as pd
+    import math
+    
+    # Open, read, and parse html file
+    file = open(path, "r") # Open html file
+    #test = open("C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Unit Data\\PropertyID0.html", "r")
+    file = file.read() # Read into memory
+    soup = BeautifulSoup(file, "lxml") # Parse html file
+    
+    # Now we try to extract local metro station information
+    MetroStation = []
+    Distance = []
+    Time = []
+    
+    # Find the transportation table
+    transport = soup.find_all("div", attrs = {"class" : "transportationDetail"})
+    for element in transport:
+        if "Transit / Subway" in element.find("th").text: # Look for commuter rail
+            look = element.find_all("td")
+            for row in look:
+                if " min" in row.text: # Look for the time from metro station
+                    Time.append(int(row.text.split(" ")[0]))
+                elif row.text[len(row.text) - 2:len(row.text)] == "mi": # Look for distance from metro station
+                    Distance.append(float(row.text.split(" ")[0]))
+                else: # Else it's the name of the metro station
+                    MetroStation.append(row.text)
+        else: # Else keep looking for commuter rail table
+            continue # Go back to for loop
+    
+    # Use in case there are no nearby metro stations
+    if len(MetroStation) == 0:
+        PropertyID = [int(i)]
+        MetroStation = ["None"]
+        Distance = [math.nan]
+        Time = [math.nan]
+        Transportation = pd.DataFrame({"pid" : PropertyID, "station" : MetroStation,"distance" : Distance, "time" : Time})
+    else: # Else there are nearby metro stations so we store those   
+        PropertyID = [int(i)]*len(MetroStation)
+        Transportation = pd.DataFrame({"pid" : PropertyID, "station" : MetroStation,"distance" : Distance, "time" : Time})
+        
+    Transportation = Transportation[["pid", "station", "distance", "time"]]
+    
+    # Return property date and local metro transportation data
+    return(Transportation)
 # ----------------------------------------- END FUNCTIONS -----------------------------------------#
-# ----------------------------------------- BEGIN SCRIPT -----------------------------------------#
-    
-# Import required packages
-import os
-import re
-import pandas as pd
-import math
 
-
-# List files in directory
-folder = "C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\DMV\\data\\unit data dedup\\"
-#AllCities = pd.read_csv("C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\Capstone Project Data\\Partly Cleaned September 24\\AllCities.csv", encoding = "latin-1")
-#files = ["PropertyID954.html", "PropertyID1014.html", "PropertyID2323.html"]
-
-# Initialize variables to store output
-Property = []
-Transportation = []
-
-# Create regular expression to search for a single digit number to a 4-digit number
-numRegex = re.compile(r"\d{1,4}")
-
-count = 0
-
-# For each file in directory
-for file in os.listdir(folder):
-    ID = numRegex.search(file).group() # Get property ID
-    # Parse unit-level data and output unit-level data for that property and local metro station data
-    P, T = GetAvailableApts(folder+file, ID)
-    Property.append(P) # Append unit-level data to list
-    Transportation.append(T) # Append local metro station data to list
-    if count%100 == 0:
-        print(count)
-    count+=1
-    
-# Append unit-level datand local metro station data to single data frame
-PropertyDF = pd.DataFrame()
-TransportationDF = pd.DataFrame()
-
-for df in Property:
-    PropertyDF = PropertyDF.append(df, ignore_index = True)
-
-PropertyDF.loc[PropertyDF['baths'] == '', 'baths'] = math.nan
-PropertyDF.baths = PropertyDF.baths.apply(lambda x: HalfBath(x))
-PropertyDF.baths = PropertyDF.baths.apply(lambda x: float(x))
-    
-for df in Transportation:
-    TransportationDF = TransportationDF.append(df, ignore_index = True)
-
-# Initialize list to store data
-Parent = []
-
-i = 0
-# For each file in the directory
-for file in os.listdir(folder):
-    ID = numRegex.search(file).group() # Get property ID
-    # Parse the data to find the parent company
-    df = GetParentCompany(folder+file, ID)    
-    Parent.append(df) # Append to list
-    
-    # Use to keep track of progress
-    if i%100 == 0:
-        print(i)
-    i+=1
-
-ParentDF = pd.DataFrame()
-
-for df in Parent:
-    ParentDF = ParentDF.append(df, ignore_index = True)
-    
-Type = []
-
-i = 0
-# For each file in the directory
-for j in range(0,7244):
-    ID = j#ID = numRegex.search(file).group() # Get property ID
-    # Parse the data to find the type
-    df = GetType(folder+"PropertyID"+str(j)+".html", ID)    
-    Type.append(df) # Append to list
-    
-    # Use to keep track of progress
-    if i%100 == 0:
-        print(i)
-    i+=1
-
-TypeDF = pd.DataFrame()
-
-for df in Type:
-    TypeDF = TypeDF.append(df, ignore_index = True)
-    
-
-ParentLU = pd.DataFrame(ParentDF.parent.unique(), columns = ["parent"])
-ParentLU["parentid"] = range(0, len(ParentLU))
-ParentLU = ParentLU[["parentid", "parent"]]
-
-ParentDF = ParentDF.merge(ParentLU, how = "inner", on = "parent")
-ParentDF = ParentDF[["pid", "parentid"]]
-ParentDF.sort_values("pid", inplace = True)
-ParentDF.index = range(0, len(ParentDF))
-
-TransportationDF.sort_values(["pid", "distance"], inplace = True)
-TransportationDF.index = range(0, len(TransportationDF))
-
-PropertyDF.sort_values(["pid", "beds", "baths"], inplace = True)
-PropertyDF.index = range(0, len(PropertyDF))
-
-
-# Write outputs of script to CSV
-    
-PropertyDF.to_csv("Units.csv", index = False)
-TransportationDF.to_csv("UnitTransport.csv", index = False)
-ParentDF.to_csv("Parent.csv", index = False)
-ParentLU.to_csv("ParentLU.csv", index = False)
-TypeDF.to_csv("Type.csv", index = False)
-
-
-# ----------------------------------------- END SCRIPT -----------------------------------------#
-""" ----------------------------------------- BEGIN THINGS TO DO -----------------------------------------
-
-1. Add function to get type of apartment (apartment, home, townhome, condo, etc...)
-# ----------------------------------------- END THINGS TO DO -----------------------------------------"""
-
-
-# ----------------------------------------- BEGIN OLD CODE -----------------------------------------#
-
-# ----------------------------------------- END OLD CODE -----------------------------------------#
