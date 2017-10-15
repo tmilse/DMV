@@ -1257,5 +1257,54 @@ def GetCapitalization(df):
     # Return modified data frame
     return(df)
     
+def GetImage(df):
+    
+    # Import required packages
+    import re
+    import pandas as pd
+    import math
+    
+    # Get property id and image columns
+    im = df[['Images']]
+    im = pd.DataFrame(im)
+    im['pid'] = range(0, len(im))
+    pid  = pd.DataFrame()
+    ImageDesc = []
+    ImageLink = []
+    NumImages = []
+    
+    # Create regex to extract image description and image link
+    DescRegex = re.compile(r'(.*?)\]')
+    LinkRegex = re.compile(r'\((.*?)\)')
+    
+    i = 0 # Counter for outer loop
+    for images in im["Images"]:
+        if isinstance(images, str):
+            imsplit = images.split("![") # Split cell text by exclamation point
+            NumImag = len(imsplit) - 1 # Length of split text minus one is the number of images
+            NumImages.append(NumImag) # Append number of images to list
+            j = 0 # Counter for inner loop
+            for text in imsplit[1:]:
+                Link = LinkRegex.findall(text)[0] # Extract link to image using regular expression
+                Desc = DescRegex.findall(text)[0].split(" - ")[0] # Extract image description using regular expression
+                ImageLink.append(Link) # Append link to list
+                ImageDesc.append(Desc) # Append description to list
+                j += 1 # Update counter
+            pid = pid.append([im.pid[i]]*j, ignore_index = True) # Keep track of property id for each image link and image description
+        else:
+            NumImages.append(math.nan)
+        i += 1 # Update counter
+    
+    output_NumImDF = pd.DataFrame()
+    output_NumImDF["pid"] = range(0, len(df))
+    output_NumImDF["numimage"] = NumImages
+    
+    output_ImDF = pd.DataFrame()
+    output_ImDF["pid"] = pid[0]
+    output_ImDF["imdesc"] = ImageDesc
+    output_ImDF["imlink"] = ImageLink
+        
+    return(output_NumImDF, output_ImDF)
+    
             
 # ----------------------------------------- END FUNCTIONS -----------------------------------------#

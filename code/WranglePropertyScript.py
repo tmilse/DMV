@@ -42,6 +42,7 @@ Address.pid = range(0,len(Address)) # Rewrite pid
 Property = Property.loc[Address.index] # Remove duplicates from Property
 Property.index = range(0, len(Property)) # Rewrite index
 Address.index = range(0,len(Address)) # Rewrite index
+NumImage, Images = GetImage(Property) # Get number of images for each property and image links/descriptions
 #Names = GetNames(Property) # Gets the names of the properties
 #Links = GetLinks(Property) # Get links to apartments.com page for property
 #Links["url"][3218] = "https://www.apartments.com/waverly-gardens-62-or-better-woodstock-md/3xvedvg/" # Manually set these links
@@ -50,15 +51,15 @@ Address.index = range(0,len(Address)) # Rewrite index
 #PetsAllowed = GetPetPolicy(Property)
 #Parking = GetParkingPolicy(Property)
 #Features = GetFeatures(Property, "Features")
-Gym = GetFeatures(Property, "Gym")
-Kitchen = GetFeatures(Property, "Kitchen")
+#Gym = GetFeatures(Property, "Gym")
+#Kitchen = GetFeatures(Property, "Kitchen")
 #Amenities = GetFeatures(df, "Amenities")
-LivingSpace = GetFeatures(Property, "Living Space")
-Services = GetFeatures(Property, "Services")
-PropertyInfo = GetFeatures(Property, "Property Info")
-PropertyInfo = UnpackPropInfo(PropertyInfo)
-IndoorInfo = GetFeatures(Property, "Indoor Info")
-OutdoorInfo = GetFeatures(Property, "Outdoor Info")
+#LivingSpace = GetFeatures(Property, "Living Space")
+#Services = GetFeatures(Property, "Services")
+#PropertyInfo = GetFeatures(Property, "Property Info")
+#PropertyInfo = UnpackPropInfo(PropertyInfo)
+#IndoorInfo = GetFeatures(Property, "Indoor Info")
+#OutdoorInfo = GetFeatures(Property, "Outdoor Info")
 #MonthlyFeesMin, MonthlyFeesMax = GetFees(Property, "Monthly Fees")
 #OneTimeFeesMin, OneTimeFeesMax = GetFees(Property, "One Time Fees")
 #FeaturesLU, GymLU, KitchenLU, LivingSpaceLU, ServicesLU, IndoorInfoLU, OutdoorInfoLU = GetLookupTables(True)
@@ -87,7 +88,10 @@ OutdoorInfo = GetFeatures(Property, "Outdoor Info")
 #MonthlyFeesMax.to_csv("MonthlyFeesMax.csv", index = False)
 #OneTimeFeesMin.to_csv("OneTimeFeesMin.csv", index = False)
 #OneTimeFeesMax.to_csv("OneTimeFeesMax.csv", index = False)
-#
+#NumImage.to_csv("NumImage.csv", index = False)
+#Im.to_csv("Images.csv", index = False)
+
+
 ## Sort the lookup tables alphabetically
 #FeaturesLU.sort_values(["desc"], inplace = True)
 #FeaturesLU.index = range(0, len(FeaturesLU))
@@ -118,10 +122,10 @@ OutdoorInfo = GetFeatures(Property, "Outdoor Info")
 
 """ ----------------------------------------- BEGIN THINGS TO DO -----------------------------------------
 
-1. **Add function to extract number of images**
-2. Change encoding of description column
-3. Scrape apartment ratings?
-4. Encode columns of PropertyInfo to correct type
+1. Change encoding of description column
+2. Scrape apartment ratings?
+3. Encode columns of PropertyInfo to correct type
+4. Remove rows with zip codes 21236, 21234, 21128, 21117, 21208
 
 # ----------------------------------------- END THINGS TO DO -----------------------------------------"""
 
