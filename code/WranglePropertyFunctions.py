@@ -1285,7 +1285,15 @@ def GetImage(df):
             NumImages.append(NumImag) # Append number of images to list
             j = 0 # Counter for inner loop
             for text in imsplit[1:]:
-                Link = LinkRegex.findall(text)[0] # Extract link to image using regular expression
+                Link = LinkRegex.findall(text)
+                if len(Link) > 1:
+                    for element in Link:
+                        if 'http' in element:
+                            Link = element
+                        else:
+                            Link = math.nan
+                else:
+                    Link = LinkRegex.findall(text)[0] # Extract link to image using regular expression
                 Desc = DescRegex.findall(text)[0].split(" - ")[0] # Extract image description using regular expression
                 ImageLink.append(Link) # Append link to list
                 ImageDesc.append(Desc) # Append description to list
