@@ -26,7 +26,7 @@ Data = []
 
 # Locally
 Property = pd.DataFrame()
-folder = 'C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\DMV\\data\\property data\\'
+folder = '//Users//nicholaskallfa//DMV//data//property data//'
 
 
 for file in os.listdir(folder):
@@ -42,7 +42,7 @@ Address.pid = range(0,len(Address)) # Rewrite pid
 Property = Property.loc[Address.index] # Remove duplicates from Property
 Property.index = range(0, len(Property)) # Rewrite index
 Address.index = range(0,len(Address)) # Rewrite index
-NumImage, Images = GetImage(Property) # Get number of images for each property and image links/descriptions
+#NumImage, Images = GetImage(Property) # Get number of images for each property and image links/descriptions
 #Names = GetNames(Property) # Gets the names of the properties
 #Links = GetLinks(Property) # Get links to apartments.com page for property
 #Links["url"][3218] = "https://www.apartments.com/waverly-gardens-62-or-better-woodstock-md/3xvedvg/" # Manually set these links
@@ -61,7 +61,7 @@ NumImage, Images = GetImage(Property) # Get number of images for each property a
 #IndoorInfo = GetFeatures(Property, "Indoor Info")
 #OutdoorInfo = GetFeatures(Property, "Outdoor Info")
 #MonthlyFeesMin, MonthlyFeesMax = GetFees(Property, "Monthly Fees")
-#OneTimeFeesMin, OneTimeFeesMax = GetFees(Property, "One Time Fees")
+OneTimeFeesMin, OneTimeFeesMax = GetFees(Property, "One Time Fees")
 #FeaturesLU, GymLU, KitchenLU, LivingSpaceLU, ServicesLU, IndoorInfoLU, OutdoorInfoLU = GetLookupTables(True)
 #PropertyDesc = Property[["Description"]]
 #PropertyDesc["pid"] = range(0, len(PropertyDesc))
@@ -124,8 +124,8 @@ NumImage, Images = GetImage(Property) # Get number of images for each property a
 
 1. Change encoding of description column
 2. Scrape apartment ratings?
-3. Encode columns of PropertyInfo to correct type
-4. Remove rows with zip codes 21236, 21234, 21128, 21117, 21208
+3. Optionally choose to remove rows with zip codes 21236, 21234, 21128, 21117, 21208
+4. Columns of onetimefees
 
 # ----------------------------------------- END THINGS TO DO -----------------------------------------"""
 

@@ -909,8 +909,8 @@ def GetFees(df, column):
     # Insert Property ID column in each table
     output_mincostDF.insert(loc = 0, column = "pid", value = range(0, len(df)))
     output_maxcostDF.insert(loc = 0, column = "pid", value = range(0, len(df)))
-    output_maxcostDF = output_maxcostDF.astype(int)
-    output_mincostDF = output_mincostDF.astype(int)
+#    output_maxcostDF = output_maxcostDF.astype(int)
+#    output_mincostDF = output_mincostDF.astype(int)
 
         
     # Return data frames
