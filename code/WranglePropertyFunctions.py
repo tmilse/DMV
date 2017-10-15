@@ -759,7 +759,7 @@ def GetFeatures(df, column):
     if column != "Amenities":
         outputDF = outputDF.pivot(index = "pid", columns = "feature", values = "value").fillna(value = 0)
         outputDF.insert(loc = 0, column = "pid", value = range(0, len(df)))
-
+        outputDF = outputDF.astype(int)
     
     # Return data frame
     return(outputDF)
@@ -909,6 +909,8 @@ def GetFees(df, column):
     # Insert Property ID column in each table
     output_mincostDF.insert(loc = 0, column = "pid", value = range(0, len(df)))
     output_maxcostDF.insert(loc = 0, column = "pid", value = range(0, len(df)))
+    output_maxcostDF = output_maxcostDF.astype(int)
+    output_mincostDF = output_mincostDF.astype(int)
 
         
     # Return data frames
@@ -1220,5 +1222,40 @@ def UnpackPropInfo(df):
     outputDF["nstory"] = Story
     
     return(outputDF)
+    
+def GetCapitalization(df):
+    
+    # Import required packages
+    import re
+    import pandas as pd
+    import math
+    
+    capRegex = re.compile(r'\w*[A-Z]\w*[A-Z]\w*') # Finds words that are capitalized
+    CapScore = []
+    Cap = []
+    
+    for description in df.desc: # For each description
+        if isinstance(description, str): # If description is a string
+            NWords = len(description.split(" ")) # Get number of words in the description
+            NCapWords = len(capRegex.findall(description)) # Get number of words in all caps
+            CapScore.append(round(NCapWords/NWords,2)) # Divide the number of words in all caps by the number of words to get the capitalization score and round to 2 decimal places
+            if NCapWords > 0: # If there are words in all caps
+                Cap.append(1) # Append a 1 (i.e. Yes) to list
+            else:
+                Cap.append(0) # Else append a 0 (i.e. No) to list
+        else: # Else if the description is not a string we have no information
+            CapScore.append(math.nan) 
+            Cap.append(math.nan)
+    
+    # Convert lists to dataframes and append as columns to data frame        
+    CapScore = pd.DataFrame(CapScore)
+    Cap = pd.DataFrame(Cap)
+    
+    df["capperc"] = CapScore
+    df["cap"] = Cap
+    
+    # Return modified data frame
+    return(df)
+    
             
 # ----------------------------------------- END FUNCTIONS -----------------------------------------#

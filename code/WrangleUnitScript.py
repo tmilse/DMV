@@ -132,8 +132,7 @@ TypeDF.to_csv("Type.csv", index = False)
 
 # ----------------------------------------- END SCRIPT -----------------------------------------#
 """ ----------------------------------------- BEGIN THINGS TO DO -----------------------------------------
-
-1. Add function to get type of apartment (apartment, home, townhome, condo, etc...)
+1. Encode Units, Commuter Rail, Metro Station properly
 # ----------------------------------------- END THINGS TO DO -----------------------------------------"""
 
 
