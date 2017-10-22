@@ -10,6 +10,7 @@ Description: This file contains a script that can be used to run functions that 
 import pandas as pd
 import os
 from WranglePropertyFunctions import *
+from haversine import haversine
 
 ## -------------------------- Use the below code to get all data in its original form in a single data frame
 #DataList = requests.get("https://worm.nyc3.digitaloceanspaces.com/") # Request html from data store
@@ -26,7 +27,8 @@ Data = []
 
 # Locally
 Property = pd.DataFrame()
-folder = '//Users//nicholaskallfa//DMV//data//property data//'
+folder = 'C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\DMV\\data\\property data\\' # For Windows
+#folder = '//Users//nicholaskallfa//DMV//data//property data//' # For Mac
 
 
 for file in os.listdir(folder):
@@ -42,6 +44,8 @@ Address.pid = range(0,len(Address)) # Rewrite pid
 Property = Property.loc[Address.index] # Remove duplicates from Property
 Property.index = range(0, len(Property)) # Rewrite index
 Address.index = range(0,len(Address)) # Rewrite index
+#Geo = pd.read_csv('C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\DMV\\cleaned data\\AddressGeo.csv')
+#Coordinates = pd.read_csv('C:\\Users\\NKallfa\\Desktop\\Documents\\Georgetown Data Science Certificate\\DMV\\cleaned data\\Coordinates.csv')
 #NumImage, Images = GetImage(Property) # Get number of images for each property and image links/descriptions
 #Names = GetNames(Property) # Gets the names of the properties
 #Links = GetLinks(Property) # Get links to apartments.com page for property
@@ -61,13 +65,15 @@ Address.index = range(0,len(Address)) # Rewrite index
 #IndoorInfo = GetFeatures(Property, "Indoor Info")
 #OutdoorInfo = GetFeatures(Property, "Outdoor Info")
 #MonthlyFeesMin, MonthlyFeesMax = GetFees(Property, "Monthly Fees")
-OneTimeFeesMin, OneTimeFeesMax = GetFees(Property, "One Time Fees")
+#OneTimeFeesMin, OneTimeFeesMax = GetFees(Property, "One Time Fees")
 #FeaturesLU, GymLU, KitchenLU, LivingSpaceLU, ServicesLU, IndoorInfoLU, OutdoorInfoLU = GetLookupTables(True)
 #PropertyDesc = Property[["Description"]]
 #PropertyDesc["pid"] = range(0, len(PropertyDesc))
 #PropertyDesc = PropertyDesc[["pid", "Description"]]
 #PropertyDesc.rename(columns = {"Description": "desc"}, inplace = True)
 #PropertyDesc = GetCapitalization(PropertyDesc)
+#DCDistance = GetDistanceToDC(Coordinates)
+#PairDistance = GetPairDistances(Coordinates)
 #
 ## Write outputs of script to CSV
 #Names.to_csv("Name.csv", index = False)
@@ -90,8 +96,10 @@ OneTimeFeesMin, OneTimeFeesMax = GetFees(Property, "One Time Fees")
 #OneTimeFeesMax.to_csv("OneTimeFeesMax.csv", index = False)
 #NumImage.to_csv("NumImage.csv", index = False)
 #Im.to_csv("Images.csv", index = False)
-
-
+#Coordinates.to_csv("Coordinates.csv", index = False)
+#DCDistance.to_csv("DistanceToDC.csv", index = False)
+#PairDistance.to_csv("PairDistance.csv", index = False)
+#
 ## Sort the lookup tables alphabetically
 #FeaturesLU.sort_values(["desc"], inplace = True)
 #FeaturesLU.index = range(0, len(FeaturesLU))
@@ -122,10 +130,8 @@ OneTimeFeesMin, OneTimeFeesMax = GetFees(Property, "One Time Fees")
 
 """ ----------------------------------------- BEGIN THINGS TO DO -----------------------------------------
 
-1. Change encoding of description column
-2. Scrape apartment ratings?
-3. Optionally choose to remove rows with zip codes 21236, 21234, 21128, 21117, 21208
-4. Columns of onetimefees
+1. Change encoding of description column? Not sure I can do this. 
+2. Optionally choose to remove rows with zip codes 21236, 21234, 21128, 21117, 21208
 
 # ----------------------------------------- END THINGS TO DO -----------------------------------------"""
 

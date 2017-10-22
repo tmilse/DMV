@@ -141,6 +141,16 @@ def SplitAddresses(df):
     outputDF["state"] = stateDF["State"]
     outputDF["zip"] = zipCodeDF["Zip_Code"]
     
+    outputDF.city = outputDF.city.apply(lambda x: x.strip())
+    outputDF.state = outputDF.state.apply(lambda x: x.strip())
+    outputDF.zip = outputDF.zip.apply(lambda x: x.strip())
+    
+    # Fix some cells
+    outputDF.state[3320] = 'MD'
+    outputDF.zip[3320] = '20877'
+    outputDF.state[6993] = 'District of Columbia'
+    outputDF.zip[6993] = '20007'
+    
     # Return data frame
     return(outputDF)
     
@@ -857,23 +867,25 @@ def GetFees(df, column):
     outputDF["maxcost"] = MaxCost[0]
     
     if column == "One Time Fees":
-        outputDF.loc[outputDF["desc"] == "Cat Deposit",  "desc"] = "dogdep"
-        outputDF.loc[outputDF["desc"] == "Dog Deposit",  "desc"] = "catdep"
+        outputDF.loc[outputDF["desc"] == "Cat Deposit",  "desc"] = "dep_cat"
+        outputDF.loc[outputDF["desc"] == "Dog Deposit",  "desc"] = "dep_dog"
         outputDF.loc[outputDF["desc"] == "Other",  "desc"] = "unknown"
-        outputDF.loc[outputDF["desc"] == "Other Deposit",  "desc"] = "otherdep"
-        outputDF.loc[outputDF["desc"] == "Bird Deposit",  "desc"] = "birddep"
-        outputDF.loc[outputDF["desc"] == "Fish Deposit",  "desc"] = "fishdep"
-        outputDF.loc[outputDF["desc"] == "Reptile Deposit",  "desc"] = "reptiledep"
-        outputDF.loc[outputDF["desc"] == "Admin Fee",  "desc"] = "admin"
-        outputDF.loc[outputDF["desc"] == "Amenity Fee",  "desc"] = "amenity"
-        outputDF.loc[outputDF["desc"] == "Application Fee",  "desc"] = "appfee"
-        outputDF.loc[outputDF["desc"] == "Bird Fee",  "desc"] = "birdfee"
-        outputDF.loc[outputDF["desc"] == "Cat Fee",  "desc"] = "catfee"
-        outputDF.loc[outputDF["desc"] == "Dog Fee",  "desc"] = "dogfee"
-        outputDF.loc[outputDF["desc"] == "Fish Fee",  "desc"] = "fishfee"
-        outputDF.loc[outputDF["desc"] == "Move-In Fee",  "desc"] = "movein"
+        outputDF.loc[outputDF["desc"] == "Other Deposit",  "desc"] = "dep_other"
+        outputDF.loc[outputDF["desc"] == "Bird Deposit",  "desc"] = "dep_bird"
+        outputDF.loc[outputDF["desc"] == "Fish Deposit",  "desc"] = "dep_fish"
+        outputDF.loc[outputDF["desc"] == "Reptile Deposit",  "desc"] = "dep_rept"
+        outputDF.loc[outputDF["desc"] == "Admin Fee",  "desc"] = "fee_admin"
+        outputDF.loc[outputDF["desc"] == "Amenity Fee",  "desc"] = "fee_amenity"
+        outputDF.loc[outputDF["desc"] == "Application Fee",  "desc"] = "fee_app"
+        outputDF.loc[outputDF["desc"] == "Bird Fee",  "desc"] = "fee_bird"
+        outputDF.loc[outputDF["desc"] == "Cat Fee",  "desc"] = "fee_cat"
+        outputDF.loc[outputDF["desc"] == "Dog Fee",  "desc"] = "fee_dog"
+        outputDF.loc[outputDF["desc"] == "Fish Fee",  "desc"] = "fee_fish"
+        outputDF.loc[outputDF["desc"] == "Move-In Fee",  "desc"] = "fee_movein"
         outputDF.loc[outputDF["desc"] == "NA",  "desc"] = "na"
-        outputDF.loc[outputDF["desc"] == "Reptile Fee",  "desc"] = "reptilefee"
+        outputDF.loc[outputDF["desc"] == "Reptile Fee",  "desc"] = "fee_rept"
+        outputDF.loc[outputDF["desc"] == "Other Fee",  "desc"] = "fee_other"
+
     else:
         outputDF.loc[outputDF["desc"] == "Unassigned Surface Lot Parking",  "desc"] = "unlotpark"
         outputDF.loc[outputDF["desc"] == "Assigned Covered Parking",  "desc"] = "ascovpark"
@@ -1294,7 +1306,7 @@ def GetImage(df):
                             Link = math.nan
                 else:
                     Link = LinkRegex.findall(text)[0] # Extract link to image using regular expression
-                Desc = DescRegex.findall(text)[0].split(" - ")[0] # Extract image description using regular expression
+                Desc = DescRegex.findall(text)[0].split(" - ")[0].strip().lower() # Extract image description using regular expression
                 ImageLink.append(Link) # Append link to list
                 ImageDesc.append(Desc) # Append description to list
                 j += 1 # Update counter
@@ -1311,8 +1323,74 @@ def GetImage(df):
     output_ImDF["pid"] = pid[0]
     output_ImDF["imdesc"] = ImageDesc
     output_ImDF["imlink"] = ImageLink
+    
+    output_ImDF = output_ImDF.drop([20376, 20438])
+    output_ImDF = output_ImDF.reset_index()
+    output_ImDF = output_ImDF.rename(columns = {"index":"imageid"})
         
     return(output_NumImDF, output_ImDF)
     
+def GetDistanceToDC(df):
+    
+    # Import required packages
+    from haversine import haversine
+    import pandas as pd
+    
+    # DC Latitude/longitude
+    DCLongitude = -77.0369
+    DCLatitude = 38.9072
+    DCLatLong = (DCLatitude, DCLongitude)
+    
+    # Get latitude of each property
+    Latitude = []
+    for lat in df["lat"]:
+        Latitude.append(lat)
+    
+    # Get longitude of each property
+    Longitude = []
+    for long in df["long"]:
+        Longitude.append(long)
+     
+    # Get distance of each property to DC
+    DistToDC = []
+    for i in range(0,len(Longitude)):
+        CityLatLong = (Latitude[i], Longitude[i])
+        distance = round(haversine(CityLatLong, DCLatLong, miles = True), ndigits = 2) # Calculate distance using haversine formula and round to 2 decimal places
+        DistToDC.append(distance)
+        
+    # Create data frame for output and return
+    DistToDCDF = pd.DataFrame()
+    DistToDCDF['pid'] = range(0, len(df))
+    DistToDCDF['distancetodc'] = DistToDC
+    
+    return(DistToDCDF)
+    
+def GetPairDistances(df):
+    
+    # Import required packages
+    from haversine import haversine
+    import numpy as np
+    import pandas as pd
+    
+    # Calculate all property-pair distances
+    L = len(df)
+    distances = np.zeros(shape = (L,L)) # Initialize a matrix of 0's
+    # For each property get the latitude/longitude
+    for i in range(0, L):
+        FixedLat = df.lat[i]
+        FixedLong = df.long[i]
+        FixedLatLong = (FixedLat, FixedLong)
+        # Then with one lat/long fixed loop through all other lat/long and calculate distance to fixed lat/long
+        for j in range(0, L):
+            Lat = df.lat[j]
+            Long = df.long[j]
+            LatLong = (Lat, Long)
+            distance = round(haversine(LatLong, FixedLatLong, miles = True), ndigits = 2) # Calculate distance using haversine formula and round to 2 decimal places
+            distances[i,j] = distance # Place calculated distance in row i, column j of matrix
+    
+    # Turn matrix into data frame and return data frame
+    DistancesDF = pd.DataFrame(distances)
+    return(DistancesDF)
+        
             
 # ----------------------------------------- END FUNCTIONS -----------------------------------------#
